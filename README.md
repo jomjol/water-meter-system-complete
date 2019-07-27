@@ -16,11 +16,9 @@ Path are relative, so it should run immediatly with the following command:
 
 ### Remarks
 * Node assumes some libraries to be installed using:
-	* `opencv4nodejs`
 	* `ini`
     * `opencv4nodejs`
-    * `@tensorflow/tfjs-node`
-    * `@tensorflow/tfjs`
+    * `@tensorflow/tfjs-node`, `@tensorflow/tfjs`
     * `jpeg-js`
     * `http`, `url`
 	
@@ -39,13 +37,13 @@ http://server-ip:3000/?url=http://picture-server/image.jpg&full
 | full | optional - if set the details on the processing is shown, otherwise only the number is given back | `full` |
 
 
-The output depends on the setting of the paramter `full`:
+The output depends on the setting of the paramter `full`.
 
-### `full` is omitted: 
+#### `full` is omitted 
 
 <img src="./images/server_output.png" width="400">
    
-### `full` is set: 
+#### `full` is set:
 
 <img src="./images/sever_output_full.png" width="400">
 
