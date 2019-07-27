@@ -16,10 +16,9 @@ Path are relative, so it should run immediatly with the following command:
 
 ### Remarks
 * Node assumes some libraries to be installed using `npm install`:
-	* `ini`
+	* `ini`, `http`, `url`
     * `opencv4nodejs`, `jpeg-js`
     * `@tensorflow/tfjs-node`, `@tensorflow/tfjs`
-    * `http`, `url`
 	
 	
 	
