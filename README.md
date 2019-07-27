@@ -1,7 +1,7 @@
 # water-meter-system-complete
  
 This repository is the sum of different projects to read out an analog water meter with the help of a camera and image processing, including neural network processing to extract the values.
-The result is a HTTP-server, that takes an image as input, process it and gives as an output the water meter number, including the subdigits.
+The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
 
 The overall system with description of the single steps is described here: [https://github.com/jomjol/water-meter-measurement-system](https://github.com/jomjol/water-meter-measurement-system)
 
@@ -15,11 +15,10 @@ Path are relative, so it should run immediatly with the following command:
 * `node wasserzaehler.js`
 
 ### Remarks
-* Node assumes some libraries to be installed using:
+* Node assumes some libraries to be installed using `npm install`:
 	* `ini`
-    * `opencv4nodejs`
+    * `opencv4nodejs`, `jpeg-js`
     * `@tensorflow/tfjs-node`, `@tensorflow/tfjs`
-    * `jpeg-js`
     * `http`, `url`
 	
 	
@@ -28,7 +27,7 @@ Path are relative, so it should run immediatly with the following command:
 
 The server is listening to port 3000 and accepts requests in the following syntac:
 
-http://server-ip:3000/?url=http://picture-server/image.jpg&full
+* http://server-ip:3000/?url=http://picture-server/image.jpg&full
 
 | Parameter | Meaning | example |
 | --------- | ------- | ------- |
@@ -42,8 +41,21 @@ The output depends on the setting of the paramter `full`.
 #### `full` is omitted 
 
 <img src="./images/server_output.png" width="400">
+
+The output of the server are 3 numbers, separated by a tabulator.
+
+| Number | Meaning | 
+| --------- | ------- |
+| First number | Full readout, including main digits and subdigits, leading zeros are suppresed |
+| Second number | Direct readout of the digital digits, including leading zeros |
+| Third number | post digit numbers |
+
+##### Remark
+If a digit cannot be recognized, e.g. because it is half between 2 digits, then instead of the number a "N" is written at the corresponding position. In this case a direct conversion to a number will not work. Additional information (e.g. last valid full reading) needs to be used to extrapolate the missing digit.
    
 #### `full` is set:
+
+It is not necessary to assign a value to the parameter. If the parameter is detected, then addtionally to the readout value, parts of the image processing, including the corresponding images is attached:
 
 <img src="./images/sever_output_full.png" width="400">
 
