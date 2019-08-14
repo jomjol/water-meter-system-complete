@@ -1,4 +1,9 @@
 # water-meter-system-complete
+
+## Version
+##### 1.0 Initial Version
+##### 2.0 Update the Analog Counter Convert to "analog_needle_readout_Version2"
+* Improved stability of analog counter conversion
  
 This repository is the sum of different projects to read out an analog water meter with the help of a camera and image processing, including neural network processing to extract the values.
 The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
