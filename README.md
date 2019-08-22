@@ -1,5 +1,8 @@
 # water-meter-system-complete
 
+This repository is the sum of different projects to read out an analog water meter with the help of a camera and image processing, including neural network processing to extract the values.
+The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
+
 ## Version
 ##### 1.0 Initial Version
 ##### 2.0 Update the Analog Counter Convert to "analog_needle_readout_Version2"
@@ -7,11 +10,10 @@
 ##### 2.1 Update the Analog Counter Convert to "analog_needle_readout_Version2_2"
 * Improved stability of analog counter conversion
 ##### 2.2 Adaption to implement Docker container
-* Moved all configuration settings to subfolder ''/config'' - including teached CNNChanged
+* Moved all configuration settings to subfolder `/config` - including teached CNNChanged
 * Changed internal loading of NN-model (tf.LoadLayersModel) to server modus (internal small file server for model via exprss on port 33123) 
  
-This repository is the sum of different projects to read out an analog water meter with the help of a camera and image processing, including neural network processing to extract the values.
-The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
+
 
 The overall system with description of the single steps is described here: [https://github.com/jomjol/water-meter-measurement-system](https://github.com/jomjol/water-meter-measurement-system)
 
