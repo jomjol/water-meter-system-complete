@@ -21,7 +21,7 @@ var Digital_Digit_Pos = [];
 
 function init()
 {
-    var config = ini.parse(fs.readFileSync('./config/config.ini', 'utf-8'));
+    var config = ini.parse(fs.readFileSync('./config.ini', 'utf-8'));
 
     var rf = "initial_rotation_angle";
 

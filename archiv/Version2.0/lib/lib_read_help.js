@@ -3,16 +3,6 @@ const opencv = require('opencv4nodejs');
 const fs = require('fs');
 const tf = require('@tensorflow/tfjs')
 
-
-var express = require('express');
-var app = express();
-app.use(express.static('config/neuralnets'));
-
-app.listen(33123), function () {
-    console.log('File Server for Model on port 33123!');
-  };
-
-
 function ImageResize(input, output, dx, dy)
 {
     var im = opencv.imread(input).resize(dx, dy);

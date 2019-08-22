@@ -6,6 +6,9 @@
 * Improved stability of analog counter conversion
 ##### 2.1 Update the Analog Counter Convert to "analog_needle_readout_Version2_2"
 * Improved stability of analog counter conversion
+##### 2.2 Adaption to implement Docker container
+* Moved all configuration settings to subfolder ''/config'' - including teached CNNChanged
+* Changed internal loading of NN-model (tf.LoadLayersModel) to server modus (internal small file server for model via exprss on port 33123) 
  
 This repository is the sum of different projects to read out an analog water meter with the help of a camera and image processing, including neural network processing to extract the values.
 The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.

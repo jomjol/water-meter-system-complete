@@ -11,7 +11,7 @@ const ReadoutSingleImage = async function(image_name)
     var pic_tensor = help.load_image_to_tensor(img_zw, 32, 32);
     if (keras_model == undefined)
     {
-        keras_model = await tf.loadLayersModel('file://lib/DL_model_analog_needle/model.json');
+        keras_model = await tf.loadLayersModel('http://localhost:33123/analog_needle/model.json');
     }
     var pred = await keras_model.predict(pic_tensor);
     var metric1 = await pred.as1D().dataSync()[0];
