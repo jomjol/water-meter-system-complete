@@ -4,15 +4,13 @@ This repository is the sum of different projects to read out an analog water met
 The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
 
 ## Version
-##### 1.0 Initial Version
-##### 2.0 Update the Analog Counter Convert to "analog_needle_readout_Version2"
-* Improved stability of analog counter conversion
-##### 2.1 Update the Analog Counter Convert to "analog_needle_readout_Version2_2"
-* Improved stability of analog counter conversion
-##### 2.2 Adaption to implement Docker container
-* Moved all configuration settings to subfolder `/config` - including teached CNNChanged
-* Changed internal loading of NN-model (tf.LoadLayersModel) to server modus (internal small file server for model via exprss on port 33123) 
- 
+##### 1.x.y Initial Version within NodeJS
+* Implemenation of neural networks with version 1.x (analog and digital)
+neuron
+##### 2.0.0 Implementation in Python
+* Usage of improved analog detection (sinus and cosinus coding)
+* New folder structure to support easy implementation in Docker-ContainerUp
+* **Attention:** adaption of INI-File needed, as Python is handling this slightly different 
 
 
 The overall system with description of the single steps is described here: [https://github.com/jomjol/water-meter-measurement-system](https://github.com/jomjol/water-meter-measurement-system)
@@ -21,18 +19,19 @@ A graphical overview about the steps is shown in the following flow:
 
 <img src="./images/signal_flow.png"> 
 
-The code is implented in node.js. To run it copy the whole [code](code) directory including subdirectory.
+## Setup
+
+To run the Python code copy the whole [code](code) directory including subdirectory.
 
 Path are relative, so it should run immediatly with the following command:
-* `node wasserzaehler.js`
+* `pip install requirements.txt`
+* `python wasserzaehler.py`
 
-### Remarks
-* Node assumes some libraries to be installed using `npm install`:
-	* `ini`, `http`, `url`
-    * `opencv4nodejs`, `jpeg-js`
-    * `@tensorflow/tfjs-node`, `@tensorflow/tfjs`
-	
-	
+### Configuration
+
+The configuration is storred in the subdirectory `config`. In the Ini-file the CNN-Network to be loaded is listed. Configuration of the neural network (*.h5) itself is stored in the subdirectory `neuralnets`.
+
+		
 	
 ## Running the server
 
