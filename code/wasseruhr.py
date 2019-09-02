@@ -20,10 +20,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if "url=" in self.path:
             url = parse.parse_qs(parse.urlparse(self.path).query)['url'][0]
             simple = True
+            preValue = ''
             if ('&full' in self.path) or ('?full' in self.path):
                 simple = False
             if 'prevalue' in self.path:
-                prevValue = parse.parse_qs(parse.urlparse(self.path).query)['prevalue'][0]
+                preValue = parse.parse_qs(parse.urlparse(self.path).query)['prevalue'][0]
             urllib.request.urlretrieve(url, './image_tmp/original.jpg')
             print('Picture Download done')
             result = 'Hello World'
