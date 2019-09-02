@@ -68,10 +68,10 @@ class Zaehlerstand:
     def AnalogReadoutToValue(self, res_analog):
         prev = -1
         erg = ''
-#        for item in res_analog[::-1]:
-        for item in res_analog:
+        for item in res_analog[::-1]:
+#        for item in res_analog:
             prev = self.ZeigerEval(item, prev)
-            erg = erg + str(int(prev))
+            erg = str(int(prev)) + erg
         return erg
 
     def ZeigerEval(self, zahl, ziffer_vorgaenger):
