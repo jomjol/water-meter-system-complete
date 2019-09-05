@@ -11,6 +11,9 @@ neuron
 * Usage of improved analog detection (sinus and cosinus coding)
 * New folder structure to support easy implementation in Docker-ContainerUp
 * **Attention:** adaption of INI-File needed, as Python is handling this slightly different 
+##### 2.1.0 Integration of direct request to Image provider
+* The image soucre can be specified within in the config.ini. If no "url"-Parameter is given, the image will be pulled directly from the given source, including logging.
+* Update of the name convention of the log-files from Unix-Timestamp to Human-Readable time coding
 
 
 The overall system with description of the single steps is described here: [https://github.com/jomjol/water-meter-measurement-system](https://github.com/jomjol/water-meter-measurement-system)
@@ -30,6 +33,7 @@ Path are relative, so it should run immediatly with the following command:
 ### Configuration
 
 The configuration is storred in the subdirectory `config`. In the Ini-file the CNN-Network to be loaded is listed. Configuration of the neural network (*.h5) itself is stored in the subdirectory `neuralnets`.
+Detailed information on config.ini see [Config_Description.md](Config_Description.md)
 
 		
 	
@@ -37,12 +41,12 @@ The configuration is storred in the subdirectory `config`. In the Ini-file the C
 
 The server is listening to port 3000 and accepts requests in the following syntac:
 
-* http://server-ip:3000/?url=http://picture-server/image.jpg&full
+* http://server-ip:3000/wasserzaehler.html?url=http://picture-server/image.jpg&full
 
 | Parameter | Meaning | example |
 | --------- | ------- | ------- |
 | server-ip | address of the node-server running the script | `localhost` |
-| url | url to the picture to be analysed | `url=http://picture-server/image.jpg` |
+| url | optional, if image source is fixed and defined in config.ini - url to the picture to be analysed | `url=http://picture-server/image.jpg` |
 | full | optional - if set the details on the processing is shown, otherwise only the number is given back | `full` |
 
 

@@ -1,10 +1,5 @@
 import keras
-#from keras.models import load_model
 from tensorflow.keras.models import load_model
-#from tensorflow.python import keras
-#from tensorflow.python.keras import Sequential
-#from tensorflow.python.keras.layers import Dense, InputLayer, Conv2D, MaxPool2D, Flatten, BatchNormalization
-#from keras.models import model_from_json, model_from_yaml
 import tensorflow as tf 
 from PIL import Image
 import numpy as np
@@ -36,12 +31,12 @@ class ReadAnalogNeedle:
         model_file = config['Analog_Counter']['Modelfile']
         self.model = load_model(model_file)
 
-    def Readout(self, PictureList):
+    def Readout(self, PictureList, logtime):
         self.result = []
         for image in PictureList:
             value = self.ReadoutSingleImage(image[1])
             if len(self.log_Image) > 0:
-                self.saveLogImage(image, value)
+                self.saveLogImage(image, value, logtime)
             self.result.append(value)
         return self.result
 
@@ -58,10 +53,9 @@ class ReadAnalogNeedle:
         result = result * 10
         return result
 
-    def saveLogImage(self, image, value):
+    def saveLogImage(self, image, value, logtime):
         if (len(self.LogNames) > 0) and (not image[0] in self.LogNames):
             return
-        zeit = time.time()
-        speichername = "{:.1f}".format(value) + '_' +  image[0] + '_' + str(int(zeit)) + '.jpg'
+        speichername = "{:.1f}".format(value) + '_' +  image[0] + '_' + logtime + '.jpg'
         speichername = self.log_Image + '/' + speichername
         cv2.imwrite(speichername, image[1])
