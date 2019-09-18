@@ -26,7 +26,6 @@ The parameter `url=` in the server request can be omitted, if in the Imagesource
 #### Main section [aligment]
 In the main sections the parameter for the rotation is stored:
 
-																			   ]'
 | Parameter        | Meaning           | Example        |
 | ------------- | ------------- | ------------- |
 | initial_rotation_angle | Fixed rotation angle for prealigment | `initial_rotation_angle=0` |

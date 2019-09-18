@@ -63,6 +63,7 @@ If a digit cannot be recognized, e.g. because it is half between 2 digits, then 
 * http://server-ip:3000/wasserzaehler.html?usePreValue
 
 | Parameter | Meaning | example |
+| ----- | ------- | ------ |
 | url | url to a dedicated picture to be analysed | `url=http://picture-server/image.jpg` |
 | full | response extended by details on readout process | `full` |
 | usePreValue | if available the last fully valid readout is used to complete unambigoius digits ('N'). The prevalue can be set manuelly by 'setPreValue.html' - see below | `usePreValue` |
