@@ -7,6 +7,8 @@ The config.ini file contains the information for the alignment and ROIs to proce
 * `[Analog_Counter]`
 * `[Digital_Counter]`
 
+
+A draft for a step-by-step instruction to extract the picture parameters can be found here: [Alignment_procedure_draft.pdf](/images/Alignment_procedure_draft.pdf)
 			
 ## Imagesource
 #### Main section [Imagesource]
