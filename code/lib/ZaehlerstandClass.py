@@ -19,8 +19,33 @@ class Zaehlerstand:
         print('Digital Model Init Done')
         self.LoadFileFromHTTP = lib.LoadFileFromHTTPClass.LoadFileFromHttp()
 
+        self.LastVorkomma = ''
+        self.LastNachkomma = ''
 
-    def getZaehlerstand(self, url, simple = True, preValue = ''):
+    def setPreValue(self, setValue):
+        zerlegt = setValue.split('.')
+        vorkomma = zerlegt[0][0:len(self.CutImage.Digital_Digit)]
+        self.LastVorkomma = vorkomma.zfill(len(self.CutImage.Digital_Digit))
+        nachkomma = zerlegt[1][0:len(self.CutImage.Analog_Counter)]
+        while len(nachkomma) < len(self.CutImage.Analog_Counter):
+            nachkomma = nachkomma + '0'
+        self.LastNachkomma = nachkomma
+        result = 'Last value set to:  ' + self.LastVorkomma + '.' + self.LastNachkomma
+        return result
+
+    def getROI(self, url):
+        txt, logtime = self.LoadFileFromHTTP.LoadImageFromURL(url, './image_tmp/original.jpg')
+
+        if len(txt) == 0:
+            self.CutImage.Cut('./image_tmp/original.jpg')
+            print('Start ROI')
+            self.CutImage.DrawROI('./image_tmp/alg.jpg')
+            txt = '<p>ROI Image: <p><img src=/image_tmp/roi.jpg></img><p>'
+            print('Get ROI done')
+        return txt
+
+
+    def getZaehlerstand(self, url, simple = True, UsePreValue = False):
         txt, logtime = self.LoadFileFromHTTP.LoadImageFromURL(url, './image_tmp/original.jpg')
 
         if len(txt) == 0:
@@ -34,7 +59,11 @@ class Zaehlerstand:
             resultdigital = self.readDigitalDigit.Readout(resultcut[1], logtime)
             
             nachkomma = self.AnalogReadoutToValue(resultanalog)
-            vorkomma = self.DigitalReadoutToValue(resultdigital)
+            vorkomma = self.DigitalReadoutToValue(resultdigital, UsePreValue, self.LastNachkomma, nachkomma)
+
+            self.LastNachkomma = nachkomma
+            if not('N' in vorkomma):
+                self.LastVorkomma = vorkomma
 
             self.LoadFileFromHTTP.PostProcessLogImageProcedure(True)
 
@@ -92,12 +121,33 @@ class Zaehlerstand:
         return ergebnis
 
 
-    def DigitalReadoutToValue(self, res_digital):
+    def DigitalReadoutToValue(self, res_digital, UsePreValue, lastnachkomma, aktnachkomma):
         erg = ''
-#        for item in res_digital[::-1]:
-        for item in res_digital:
+        if UsePreValue and (len(self.LastVorkomma) > 0) and (len(self.LastNachkomma) > 0):
+            last = int(lastnachkomma[0:1])
+            aktu = int(aktnachkomma[0:1])
+            if aktu < last:
+                overZero = 1
+            else:
+                overZero = 0
+        else:
+            UsePreValue = False
+        
+        for i in range(len(res_digital)-1, -1, -1):
+            item = res_digital[i]
             if item == 'NaN':
-                item = 'N'
-            erg = erg + str(item)
+                if UsePreValue:
+                    item = self.LastVorkomma[i]
+                    if overZero:
+                        item = item + 1
+                        if item == 10:
+                            item = 0
+                            overZero = 1
+                        else:
+                            overZero = 0
+                else:
+                    item = 'N'
+            erg = str(item) + erg
+
         return erg
 

@@ -1,6 +1,5 @@
 requests==2.22.0
-Keras==2.2.5
-numpy==1.17.1
+Keras==2.2.4
+numpy==1.16.4
 Pillow==6.1.0
 opencv-python==4.1.0.25
-tensorflow=1.14.0

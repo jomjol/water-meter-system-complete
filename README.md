@@ -3,17 +3,11 @@
 This repository is the sum of different projects to read out an analog water meter with the help of a camera and image processing, including neural network processing to extract the values.
 The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
 
-## Version
-##### 1.x.y Initial Version within NodeJS
-* Implemenation of neural networks with version 1.x (analog and digital)
-neuron
-##### 2.0.0 Implementation in Python
-* Usage of improved analog detection (sinus and cosinus coding)
-* New folder structure to support easy implementation in Docker-ContainerUp
-* **Attention:** adaption of INI-File needed, as Python is handling this slightly different 
-##### 2.1.0 Integration of direct request to Image provider
-* The image soucre can be specified within in the config.ini. If no "url"-Parameter is given, the image will be pulled directly from the given source, including logging.
-* Update of the name convention of the log-files from Unix-Timestamp to Human-Readable time coding
+## Changelog - lastest version
+##### 2.2.0 (2019-09-18)
+* Update neural network for readout analog meter
+* storage and usage of last full readouts to substitute "NaN" values in digital counters
+### [Full Changelog](Changelog.md)
 
 
 The overall system with description of the single steps is described here: [https://github.com/jomjol/water-meter-measurement-system](https://github.com/jomjol/water-meter-measurement-system)
@@ -41,19 +35,13 @@ Detailed information on config.ini see [Config_Description.md](Config_Descriptio
 
 The server is listening to port 3000 and accepts requests in the following syntac:
 
-* http://server-ip:3000/wasserzaehler.html?url=http://picture-server/image.jpg&full
+* http://server-ip:3000/wasserzaehler.html
 
 | Parameter | Meaning | example |
 | --------- | ------- | ------- |
 | server-ip | address of the node-server running the script | `localhost` |
-| url | optional, if image source is fixed and defined in config.ini - url to the picture to be analysed | `url=http://picture-server/image.jpg` |
-| full | optional - if set the details on the processing is shown, otherwise only the number is given back | `full` |
 
-
-The output depends on the setting of the paramter `full`.
-
-#### `full` is omitted 
-
+Without any parameter and correct setting in the CONFIG.INI the server responses with an readout of the water meter:
 <img src="./images/server_output.png" width="400">
 
 The output of the server are 3 numbers, separated by a tabulator.
@@ -65,13 +53,40 @@ The output of the server are 3 numbers, separated by a tabulator.
 | Third number | post digit numbers |
 
 ##### Remark
-If a digit cannot be recognized, e.g. because it is half between 2 digits, then instead of the number a "N" is written at the corresponding position. In this case a direct conversion to a number will not work. Additional information (e.g. last valid full reading) needs to be used to extrapolate the missing digit.
-   
-#### `full` is set:
+If a digit cannot be recognized, e.g. because it is half between 2 digits, then instead of the number a "N" is written at the corresponding position. In this case a direct conversion to a number will not work. Additional information (e.g. last valid full reading) needs to be used to extrapolate the missing digit (see below).
 
-It is not necessary to assign a value to the parameter. If the parameter is detected, then addtionally to the readout value, parts of the image processing, including the corresponding images is attached:
 
+### Optional parameters
+
+* http://server-ip:3000/wasserzaehler.html?url=http://picture-server/image.jpg&full
+* http://server-ip:3000/wasserzaehler.html?usePreValue
+
+| Parameter | Meaning | example |
+| url | url to a dedicated picture to be analysed | `url=http://picture-server/image.jpg` |
+| full | response extended by details on readout process | `full` |
+| usePreValue | if available the last fully valid readout is used to complete unambigoius digits ('N'). The prevalue can be set manuelly by 'setPreValue.html' - see below | `usePreValue` |#
+
+If `full` is set the output contains the analysed image:
 <img src="./images/sever_output_full.png" width="400">
+
+## Additional Settings
+* http://server-ip:3000/roi.html
+
+The page `roi.html` return the image including the ROIs visible. This is usefull to check for correct setting:
+<img src="./images/roi_masked.jpg" width="400">
+
+* http://server-ip:3000/setPreValue.html?value=401.57
+
+The page `setPreValue.html` stores the number given in the parameter `value` to initiate the internal storage of a valid data. This can be used, in case the digital counter is between two number and cannot be readout uniquely at the moment.
+
+| Parameter | Meaning | example |
+| --------- | ------- | ------- |
+| value | valid setting of water meter readout | `value=401.57` |
+
+
+
+
+   
 
 
 

@@ -11,6 +11,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . ./
 
+CMD chmod +x ./restart.sh
+
 EXPOSE 3000
 
 CMD ["python", "./wasseruhr.py"]
