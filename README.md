@@ -42,6 +42,7 @@ The server is listening to port 3000 and accepts requests in the following synta
 | server-ip | address of the node-server running the script | `localhost` |
 
 Without any parameter and correct setting in the CONFIG.INI the server responses with an readout of the water meter:
+
 <img src="./images/server_output.png" width="400">
 
 The output of the server are 3 numbers, separated by a tabulator.
@@ -64,9 +65,11 @@ If a digit cannot be recognized, e.g. because it is half between 2 digits, then 
 | Parameter | Meaning | example |
 | url | url to a dedicated picture to be analysed | `url=http://picture-server/image.jpg` |
 | full | response extended by details on readout process | `full` |
-| usePreValue | if available the last fully valid readout is used to complete unambigoius digits ('N'). The prevalue can be set manuelly by 'setPreValue.html' - see below | `usePreValue` |#
+| usePreValue | if available the last fully valid readout is used to complete unambigoius digits ('N'). The prevalue can be set manuelly by 'setPreValue.html' - see below | `usePreValue` |
 
-If `full` is set the output contains the analysed image:
+
+Example with parameter `full`:
+
 <img src="./images/sever_output_full.png" width="400">
 
 ## Additional Settings
