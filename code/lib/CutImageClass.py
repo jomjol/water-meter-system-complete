@@ -1,6 +1,8 @@
 import numpy as np
 import cv2
 import configparser
+import os
+from shutil import copyfile
 
 
 
@@ -21,6 +23,8 @@ class CutImage:
 
         self.reference_image2 = config['alignment.ref2']['image']
         self.reference_p2 = (int(config['alignment.ref2']['pos_x']), int(config['alignment.ref2']['pos_y']))
+
+        self.CheckAndLoadDefaultConfig()
 
         self.ref0 = cv2.imread(self.reference_image0)
         self.ref1 = cv2.imread(self.reference_image1)
@@ -54,6 +58,39 @@ class CutImage:
             p_neu = (x1, y1, dx, dy)
             cnt.append(p_neu)
             self.Digital_Digit.append(cnt)
+
+    def CheckAndLoadDefaultConfig(self):
+        defaultdir = "./config_default/"
+        targetdir = './config/'
+        if not os.path.exists(self.reference_image0):
+            zerlegt = self.reference_image0.split('/')
+            pfad = zerlegt[0]
+            for i in range(1, len(zerlegt)-1):
+                pfad = pfad + '/' + zerlegt[i]
+                if not os.path.exists(pfad):
+                    os.makedirs(pfad)
+            defaultmodel = self.reference_image0.replace(targetdir, defaultdir)
+            copyfile(defaultmodel, self.reference_image0)
+
+        if not os.path.exists(self.reference_image1):
+            zerlegt = self.reference_image1.split('/')
+            pfad = zerlegt[0]
+            for i in range(1, len(zerlegt)-1):
+                pfad = pfad + '/' + zerlegt[i]
+                if not os.path.exists(pfad):
+                    os.makedirs(pfad)
+            defaultmodel = self.reference_image1.replace(targetdir, defaultdir)
+            copyfile(defaultmodel, self.reference_image1)
+
+        if not os.path.exists(self.reference_image2):
+            zerlegt = self.reference_image2.split('/')
+            pfad = zerlegt[0]
+            for i in range(1, len(zerlegt)-1):
+                pfad = pfad + '/' + zerlegt[i]
+                if not os.path.exists(pfad):
+                    os.makedirs(pfad)
+            defaultmodel = self.reference_image2.replace(targetdir, defaultdir)
+            copyfile(defaultmodel, self.reference_image2)
 
     def Cut(self, image):
         source = cv2.imread(image)

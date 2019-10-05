@@ -4,9 +4,13 @@ import lib.CutImageClass
 import lib.ReadDigitalDigitClass
 import lib.LoadFileFromHTTPClass
 import math
+import os
+from shutil import copyfile
 
 class Zaehlerstand:
     def __init__(self):
+        self.CheckAndLoadDefaultConfig()
+
         config = configparser.ConfigParser()
         config.read('./config/config.ini')
 
@@ -21,6 +25,12 @@ class Zaehlerstand:
 
         self.LastVorkomma = ''
         self.LastNachkomma = ''
+
+    def CheckAndLoadDefaultConfig(self):
+        defaultdir = "./config_default/"
+        targetdir = './config/'
+        if not os.path.exists('./config/config.ini'):
+            copyfile(defaultdir + 'config.ini', targetdir + 'config.ini')
 
     def setPreValue(self, setValue):
         zerlegt = setValue.split('.')
@@ -45,7 +55,7 @@ class Zaehlerstand:
         return txt
 
 
-    def getZaehlerstand(self, url, simple = True, UsePreValue = False):
+    def getZaehlerstand(self, url, simple = True, UsePreValue = False, single = False):
         txt, logtime = self.LoadFileFromHTTP.LoadImageFromURL(url, './image_tmp/original.jpg')
 
         if len(txt) == 0:
@@ -71,7 +81,10 @@ class Zaehlerstand:
 
             print('Start Making Zaehlerstand')
 
-            txt = zaehlerstand + '\t' + vorkomma  + '\t' + nachkomma 
+            if single:
+                txt = zaehlerstand 
+            else:
+                txt = zaehlerstand + '\t' + vorkomma  + '\t' + nachkomma 
 
             if not simple:
                 txt = txt + '<p>Aligned Image: <p><img src=/image_tmp/alg.jpg></img><p>'
@@ -137,7 +150,7 @@ class Zaehlerstand:
             item = res_digital[i]
             if item == 'NaN':
                 if UsePreValue:
-                    item = self.LastVorkomma[i]
+                    item = int(self.LastVorkomma[i])
                     if overZero:
                         item = item + 1
                         if item == 10:

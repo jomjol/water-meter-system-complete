@@ -4,9 +4,9 @@ This repository is the sum of different projects to read out an analog water met
 The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
 
 ## Changelog - lastest version
-##### 2.2.0 (2019-09-18)
-* Update neural network for readout analog meter
-* storage and usage of last full readouts to substitute "NaN" values in digital counters
+##### 2.3.0 (2019-10-05)
+* Load default configuration, if none is present (beneficial for Docker-Version with mounted config and log directories)
+* Parameter "simple" to reduche output to a single value
 ### [Full Changelog](Changelog.md)
 
 
@@ -61,13 +61,16 @@ If a digit cannot be recognized, e.g. because it is half between 2 digits, then 
 
 * http://server-ip:3000/wasserzaehler.html?url=http://picture-server/image.jpg&full
 * http://server-ip:3000/wasserzaehler.html?usePreValue
+* http://server-ip:3000/wasserzaehler.html?single
 
 | Parameter | Meaning | example |
 | ----- | ------- | ------ |
 | url | url to a dedicated picture to be analysed | `url=http://picture-server/image.jpg` |
 | full | response extended by details on readout process | `full` |
 | usePreValue | if available the last fully valid readout is used to complete unambigoius digits ('N'). The prevalue can be set manuelly by 'setPreValue.html' - see below | `usePreValue` |
+| single | only a singel number is given back instead of combinded value, digital and analog readouot | `single` |
 
+The paramaters can be combined arbitrary.
 
 Example with parameter `full`:
 

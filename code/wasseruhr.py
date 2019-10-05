@@ -42,8 +42,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if ('&full' in self.path) or ('?full' in self.path):
             simple = False
 
+        single = False
+        if ('&single' in self.path) or ('?single' in self.path):
+            single = True
+
         usePrevalue = False
-        if ('&usePreValue' in self.path) or ('?usePrevalue' in self.path):
+        if ('&usePreValue' in self.path) or ('?usePreValue' in self.path) or ('&usePrevalue' in self.path) or ('?usePrevalue' in self.path):
             usePrevalue = True
 
         value = ''
@@ -67,7 +71,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             return
 
         if 'wasserzaehler' in url_parse.path:
-            result = wasserzaehler.getZaehlerstand(url, simple, usePrevalue)
+            result = wasserzaehler.getZaehlerstand(url, simple, usePrevalue, single)
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()

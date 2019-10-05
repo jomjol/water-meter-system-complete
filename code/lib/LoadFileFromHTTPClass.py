@@ -27,9 +27,22 @@ class LoadFileFromHttp:
         self.LogOnlyFalsePictures = False
         if config.has_option('Imagesource', 'LogOnlyFalsePictures'):
             self.LogOnlyFalsePictures = bool(config['Imagesource']['LogOnlyFalsePictures'])
+
+        self.CheckAndLoadDefaultConfig()
         
         self.LastImageSafed = ''
 
+    def CheckAndLoadDefaultConfig(self):
+        defaultdir = "./config_default/"
+        targetdir = './config/'
+        if len(self.log_Image) > 0:
+            if not os.path.exists(self.log_Image):
+                zerlegt = self.log_Image.split('/')
+                pfad = zerlegt[0]
+                for i in range(1, len(zerlegt)):
+                    pfad = pfad + '/' + zerlegt[i]
+                    if not os.path.exists(pfad):
+                        os.makedirs(pfad)
 
     def ReadURL(self, event, url, target):
         urllib.request.urlretrieve(url, target)

@@ -10,16 +10,19 @@ import cv2
 import configparser
 import math
 import time
+from shutil import copyfile
 
 class ReadDigitalDigit:
     def __init__(self):
-#       model = tf.keras.models.load_model('./config/neuralnets/Train_CNN_Version2_Analog-Readout.h5')
         config = configparser.ConfigParser()
         config.read('./config/config.ini')
 
+        self.model_file = config['Digital_Digit']['Modelfile']
         if config.has_option('Digital_Digit', 'LogImageLocation'):
             self.log_Image = config['Digital_Digit']['LogImageLocation']
+        self.CheckAndLoadDefaultConfig()
 
+        if config.has_option('Digital_Digit', 'LogImageLocation'):
             if (os.path.exists(self.log_Image)):
                 for i in range(10):
                     pfad = self.log_Image + '/' + str(i)
@@ -39,8 +42,29 @@ class ReadDigitalDigit:
         else:
             self.log_Image = ''
 
-        model_file = config['Digital_Digit']['Modelfile']
-        self.model = load_model(model_file)
+        self.model_file = config['Digital_Digit']['Modelfile']
+        self.model = load_model(self.model_file)
+
+    def CheckAndLoadDefaultConfig(self):
+        defaultdir = "./config_default/"
+        targetdir = './config/'
+        if not os.path.exists(self.model_file):
+            zerlegt = self.model_file.split('/')
+            pfad = zerlegt[0]
+            for i in range(1, len(zerlegt)-1):
+                pfad = pfad + '/' + zerlegt[i]
+                if not os.path.exists(pfad):
+                    os.makedirs(pfad)
+            defaultmodel = self.model_file.replace(targetdir, defaultdir)
+            copyfile(defaultmodel, self.model_file)
+        if len(self.log_Image) > 0:
+            if not os.path.exists(self.log_Image):
+                zerlegt = self.log_Image.split('/')
+                pfad = zerlegt[0]
+                for i in range(1, len(zerlegt)):
+                    pfad = pfad + '/' + zerlegt[i]
+                    if not os.path.exists(pfad):
+                        os.makedirs(pfad)
 
     def Readout(self, PictureList, logtime):
         self.result = []

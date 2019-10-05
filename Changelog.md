@@ -1,4 +1,7 @@
 ## Changelog
+##### 2.3.0 (2019-10-05)
+* Load default configuration, if none is present (beneficial for Docker-Version with mounted config and log directories)
+* Parameter "simple" to reduche output to a single value
 ##### 2.2.0 (2019-09-18)
 * Update neural network for readout analog meter
 * storage and usage of last full readouts to substitute "NaN" values in digital counters
