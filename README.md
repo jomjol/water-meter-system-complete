@@ -4,9 +4,8 @@ This repository is the sum of different projects to read out an analog water met
 The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
 
 ## Changelog - lastest version
-##### 2.3.0 (2019-10-05)
-* Load default configuration, if none is present (beneficial for Docker-Version with mounted config and log directories)
-* Parameter "simple" to reduche output to a single value
+##### 3.0.0 (2019-10-06)
+* Impementation of optional consistency check of readout value (not negative, maximum rate)
 ### [Full Changelog](Changelog.md)
 
 
@@ -28,6 +27,9 @@ Path are relative, so it should run immediatly with the following command:
 
 The configuration is storred in the subdirectory `config`. In the Ini-file the CNN-Network to be loaded is listed. Configuration of the neural network (*.h5) itself is stored in the subdirectory `neuralnets`.
 Detailed information on config.ini see [Config_Description.md](Config_Description.md)
+
+##### Consistency Check
+With Version 3.0.0 a consistency check of the readout value is implemented. Prequesite for this check is a storage of the last full readout (without "N"), which can be achieved by the parameter "usePreValue".
 
 		
 	

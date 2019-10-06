@@ -1,4 +1,6 @@
 ## Changelog
+##### 3.0.0 (2019-10-06)
+* Impementation of optional consistency check of readout value (not negative, maximum rate)
 ##### 2.3.0 (2019-10-05)
 * Load default configuration, if none is present (beneficial for Docker-Version with mounted config and log directories)
 * Parameter "simple" to reduche output to a single value

@@ -3,6 +3,7 @@
 The config.ini file contains the information for the alignment and ROIs to process the image. It consists of 3 main segments, which are described in the following sections:
 
 * `[Imagesource]`
+* `[ConsistencyCheck]`
 * `[alignment]`
 * `[Analog_Counter]`
 * `[Digital_Counter]`
@@ -21,6 +22,24 @@ The parameter `url=` in the server request can be omitted, if in the Imagesource
 | TimeoutLoadImage | Maximum waiting time for image source response - otherwise error is issued | `TimeoutLoadImage=30` |
 | LogImageLocation | optional - if set, the source images will be logged in the given folder | `LogImageLocation=./log/source_image` |
 | LogOnlyFalsePictures | optional - if enabled, only false picture will be stored to avoid large amounts of pictures | `LogOnlyFalsePictures=True` |
+
+## ConsistencyCheck
+#### Main section [ConsistencyCheck]
+Here a consistency check of the readout value with respect to the previous full read value can be configured. Prequisite is, that the previous value is stored and has no non readable digits ("N"). This can be achieved by using setPreValue to store the first value and the parameter &usePreValue to constantly remove the "N" in case of unambigous digits.
+
+| Parameter        | Meaning           | Example        |
+| ------------- | ------------- | ------------- |
+| Enabled | Diable or Enable the Check | `Enabled=True` |
+| AllowNegativeRates | If set to `False`, then only increasing counter values are accepted | `AllowNegativeRates=False` |
+| MaxRateValue | Maximum absolute change from the previous value (+/-) | `MaxRateValue=0.1` |
+| ErrorReturn | Return value, in case of unconsistent values | `ErrorReturn=OldValue, ErrorMessage, Readout` |
+
+Options for ErrorReturn are the following:
+* `OldValue` = giving back the old value and ignore the "false" readout
+* `NewValue` = notify about unconstent value, but still accept it and give it back as readout
+* `ErrorMessage` = attach to value a reason for the inconistent value (max rate or negative)
+* `Readout` = attach the original readout - usefull, if the OldValue is given back to see, what the readout really was
+
 
 
 ## Alignment
