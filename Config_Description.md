@@ -105,23 +105,45 @@ The naming of the sub section depends on the ROI naming defined in the main sect
 ## Example
 
 ~~~~
+[Imagesource]
+TimeoutLoadImage=30
+#IP durch die IP des ESP32 ersetzen!
+URLImageSource=http://IP-ESP32-CAM/capture_with_flashlight
+LogImageLocation=./log/source_image
+# Falls nur schlechte / fehlerhafte Bilder gelockt werden sollen, naechste Zeile Kommentar entfernen
+#LogOnlyFalsePictures=True
+
+[ConsistencyCheck]
+Enabled=True
+AllowNegativeRates=False
+#Maximum Change of new to old value (+ or -)
+MaxRateValue=0.1
+
+#Return in Case of Error: Value = OldValue or NewValue
+#                         ErrorMessage = Return Text with problem (seperated by Tabstopp) if nothing, then no error message
+#                         Readout = Real Readout without corrections (NewValue)
+ErrorReturn=OldValue, ErrorMessage, Readout
+#ErrorReturn=OldValue, ErrorMessage
+#ErrorReturn=NewValue, ErrorMessage
+
+
 [alignment]
-initial_rotation_angle=0
+initial_rotation_angle=180
 
 [alignment.ref0]
-image=./config/Ref_ZR.jpg
-pos_x=70
-pos_y=203
+image=./config/Ref_ZR_x99_y219.jpg
+pos_x=99
+pos_y=219
 
 [alignment.ref1]
-image=./config/Ref_m3.jpg
-pos_x=575
-pos_y=79
+image=./config/Ref_m3_x512_y117.jpg
+pos_x=512
+pos_y=117
 
 [alignment.ref2]
-image=./config/Ref_x0.jpg
-pos_x=308
-pos_y=406
+image=./config/Ref_x0_x301_y386.jpg
+pos_x=301
+pos_y=386
 
 [Digital_Digit]
 names=ziffer1, ziffer2, ziffer3, ziffer4, ziffer5
@@ -131,64 +153,64 @@ LogImageLocation=./log/digital_digit
 
 [Analog_Counter]
 names=zeiger1, zeiger2, zeiger3, zeiger4
-Modelfile=./config/neuralnets/Train_CNN_Analog-Readout_Version2.h5
+Modelfile=./config/neuralnets/CNN_Analog-Readout_Version-2.1.1.h5
 LogImageLocation=./log/analog_counter
 #LogNames=zeiger3, zeiger4
 
 [Analog_Counter.zeiger1]
-pos_x=546
-pos_y=303
-dx=142
-dy=142
+pos_x=491
+pos_y=307
+dx=115
+dy=115
 
 [Analog_Counter.zeiger2]
-pos_x=448
-pos_y=416
-dx=142
-dy=142
+pos_x=417
+pos_y=395
+dx=115
+dy=115
 
 [Analog_Counter.zeiger3]
-pos_x=306
-pos_y=451
-dx=142
-dy=142
+pos_x=303
+pos_y=424
+dx=115
+dy=115
 
 [Analog_Counter.zeiger4]
-pos_x=134
-pos_y=366
-dx=142
-dy=142
+pos_x=163
+pos_y=358
+dx=115
+dy=115
 
     
 [Digital_Digit.ziffer1]
-pos_x=202
-pos_y=49
-dx=55
-dy=90
+pos_x=215
+pos_y=97
+dx=42
+dy=75
 
 [Digital_Digit.ziffer2]
-pos_x=272
-pos_y=49
-dx=55
-dy=90
+pos_x=273
+pos_y=97
+dx=42
+dy=75
 
 [Digital_Digit.ziffer3]
-pos_x=346
-pos_y=49
-dx=55
-dy=90
+pos_x=332
+pos_y=97
+dx=42
+dy=75
 
 [Digital_Digit.ziffer4]
-pos_x=417
-pos_y=49
-dx=55
-dy=90
+pos_x=390
+pos_y=97
+dx=42
+dy=75
 
 [Digital_Digit.ziffer5]
-pos_x=487
-pos_y=49
-dx=55
-dy=90
+pos_x=446
+pos_y=97
+dx=42
+dy=75
 
 ~~~~
 
