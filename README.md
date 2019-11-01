@@ -3,99 +3,66 @@
 This repository is the sum of different projects to read out an analog water meter with the help of a camera and image processing, including neural network processing to extract the values.
 The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
 
-## Changelog - lastest version
-##### 3.0.0 (2019-10-06)
-* Impementation of optional consistency check of readout value (not negative, maximum rate)
-### [Full Changelog](Changelog.md)
+###This is a dedicated Version and Installation instruction for Raspberry PI3.
+
+The main information about the usage can be found in the main branch (Version 3.0.0). This is for sure not the most lean installation procedure as most probably way much less packages are needed as installed. But in order to remove error messages I followed the suggestions from different blogs to quickly make progress.
 
 
-The overall system with description of the single steps is described here: [https://github.com/jomjol/water-meter-measurement-system](https://github.com/jomjol/water-meter-measurement-system)
+## Installation
 
-A graphical overview about the steps is shown in the following flow:
+This installation has been tested on a Raspberry Pi 3B.
 
-<img src="./images/signal_flow.png"> 
+Starting point is an installed Raspberian Strecht Lite. It should also work with the desktop version.
 
-## Setup
+#### Update and Install PIP3
 
-To run the Python code copy the whole [code](code) directory including subdirectory.
+```
+sudo apt-get update
+sudo apt-get install python3-pip
+```
 
-Path are relative, so it should run immediatly with the following command:
-* `pip install requirements.txt`
-* `python wasserzaehler.py`
+#### Install Tensorflow
 
-### Configuration
+```
+pip3 install tensorflow 
+```
 
-The configuration is storred in the subdirectory `config`. In the Ini-file the CNN-Network to be loaded is listed. Configuration of the neural network (*.h5) itself is stored in the subdirectory `neuralnets`.
-Detailed information on config.ini see [Config_Description.md](Config_Description.md)
+#### Install  OpenCV, Pillow and Requests
 
-##### Consistency Check
-With Version 3.0.0 a consistency check of the readout value is implemented. Prequesite for this check is a storage of the last full readout (without "N"), which can be achieved by the parameter "usePreValue".
+```
+sudo apt-get install python-opencv libqtgui4  libgstreamer1.0-0 libjasper1 libqt4-test libjpeg-dev zlib1g-dev  libfreetype6-dev liblcms1-dev libopenjp2-7  libtiff5 libatlas-base-dev python-setuptools libilmbase-dev libopenexr-dev libavformat-dev libavformat-dev libswscale-dev libv4l-dev
+pip3 install opencv-python pillow requests
+```
 
-		
-	
-## Running the server
+## Usage
 
-The server is listening to port 3000 and accepts requests in the following syntac:
+After the installation of the environment and the dependencies you need to copy the code in a dedicated directory.
+**Attention use the code in this branch, as there are some minor changes needed**
 
-* http://server-ip:3000/wasserzaehler.html
+Then you can run the server simply with:
 
-| Parameter | Meaning | example |
-| --------- | ------- | ------- |
-| server-ip | address of the node-server running the script | `localhost` |
+`python3 wasserzaehler.py`
 
-Without any parameter and correct setting in the CONFIG.INI the server responses with an readout of the water meter:
+## Running in background
 
-<img src="./images/server_output.png" width="400">
+In order to run the server as a service in the background parallel to other applications and also have an automated restart in case of failures, I use the pm2 Process manager. To install it you need nodejs and npm:
 
-The output of the server are 3 numbers, separated by a tabulator.
+```
+sudo apt-get install nodejs npm
+sudo npm install pm2 -g
+```
 
-| Number | Meaning | 
-| --------- | ------- |
-| First number | Full readout, including main digits and subdigits, leading zeros are suppresed |
-| Second number | Direct readout of the digital digits, including leading zeros |
-| Third number | post digit numbers |
+After this you can use ```pm2 start 'python3 wasseruhr.py'``` to have it running as a service. Be patient, it takes about 30 seconds to start and respond on the http request.
 
-##### Remark
-If a digit cannot be recognized, e.g. because it is half between 2 digits, then instead of the number a "N" is written at the corresponding position. In this case a direct conversion to a number will not work. Additional information (e.g. last valid full reading) needs to be used to extrapolate the missing digit (see below).
+In order to have it persistent also after a restart or breakdown of the server do the following after the server has started:
+``` 
+pm2 save
+pm2 startup
+```
 
-
-### Optional parameters
-
-* http://server-ip:3000/wasserzaehler.html?url=http://picture-server/image.jpg&full
-* http://server-ip:3000/wasserzaehler.html?usePreValue
-* http://server-ip:3000/wasserzaehler.html?single
-
-| Parameter | Meaning | example |
-| ----- | ------- | ------ |
-| url | url to a dedicated picture to be analysed | `url=http://picture-server/image.jpg` |
-| full | response extended by details on readout process | `full` |
-| usePreValue | if available the last fully valid readout is used to complete unambigoius digits ('N'). The prevalue can be set manuelly by 'setPreValue.html' - see below | `usePreValue` |
-| single | only a singel number is given back instead of combinded value, digital and analog readouot | `single` |
-
-The paramaters can be combined arbitrary.
-
-Example with parameter `full`:
-
-<img src="./images/sever_output_full.png" width="400">
-
-## Additional Settings
-* http://server-ip:3000/roi.html
-
-The page `roi.html` return the image including the ROIs visible. This is usefull to check for correct setting:
-<img src="./images/roi_masked.jpg" width="400">
-
-* http://server-ip:3000/setPreValue.html?value=401.57
-
-The page `setPreValue.html` stores the number given in the parameter `value` to initiate the internal storage of a valid data. This can be used, in case the digital counter is between two number and cannot be readout uniquely at the moment.
-
-| Parameter | Meaning | example |
-| --------- | ------- | ------- |
-| value | valid setting of water meter readout | `value=401.57` |
+and follow the instruction followed the last prompt.
 
 
-
-
-   
 
 
 
