@@ -41,7 +41,7 @@ After the installation of the environment and the dependencies you need to copy 
 
 Then you can run the server simply with:
 
-`python3 wasserzaehler.py`
+`python3 wasseruhr.py`
 
 ## Running in background
 
