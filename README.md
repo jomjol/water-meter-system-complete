@@ -3,9 +3,9 @@
 This repository is the sum of different projects to read out an analog water meter with the help of a camera and image processing, including neural network processing to extract the values.
 The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
 
-###This is a dedicated Version and Installation instruction for Raspberry PI3.
+**This is a dedicated Version and installation instruction for Raspberry PI3.**
 
-The main information about the usage can be found in the main branch (Version 3.0.0). This is for sure not the most lean installation procedure as most probably way much less packages are needed as installed. But in order to remove error messages I followed the suggestions from different blogs to quickly make progress.
+The information about the usage can be found in the [main branch](https://github.com/jomjol/water-meter-system-complete)(Version 3.0.0). This is for sure not the most lean installation procedure as most probably way much less packages are needed as installed. But in order to remove error messages I followed the suggestions from different blogs to quickly make progress.
 
 
 ## Installation
