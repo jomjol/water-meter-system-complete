@@ -4,6 +4,8 @@ This repository is the sum of different projects to read out an analog water met
 The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
 
 ## Changelog - lastest version
+##### 3.0.2 (2019-11-07)
+* Correct error for disable Logging
 ##### 3.0.1 (2019-11-03)
 * Update to Pillow 6.2.0
 ##### 3.0.0 (2019-10-06)

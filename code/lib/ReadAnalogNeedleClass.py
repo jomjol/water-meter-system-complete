@@ -16,6 +16,9 @@ class ReadAnalogNeedle:
         config = configparser.ConfigParser()
         config.read('./config/config.ini')
 
+        self.log_Image = ''
+        self.LogNames = ''
+
         if config.has_option('Analog_Counter', 'LogImageLocation'):
             self.log_Image = config['Analog_Counter']['LogImageLocation']
             if config.has_option('Analog_Counter', 'LogNames'):
@@ -23,10 +26,6 @@ class ReadAnalogNeedle:
                 self.LogNames = []
                 for nm in zw_LogNames:
                       self.LogNames.append(nm.strip())
-            else:
-                self.LogNames = ''
-        else:
-            self.log_Image = ''
 
         self.model_file = config['Analog_Counter']['Modelfile']
 
