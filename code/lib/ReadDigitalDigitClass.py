@@ -1,4 +1,4 @@
-#import keras
+import keras
 from tensorflow.keras.models import load_model
 
 import tensorflow as tf 
@@ -16,6 +16,9 @@ class ReadDigitalDigit:
     def __init__(self):
         config = configparser.ConfigParser()
         config.read('./config/config.ini')
+
+        self.log_Image = ''
+        self.LogNames = ''
 
         self.model_file = config['Digital_Digit']['Modelfile']
         if config.has_option('Digital_Digit', 'LogImageLocation'):
@@ -37,10 +40,6 @@ class ReadDigitalDigit:
                 self.LogNames = []
                 for nm in zw_LogNames:
                       self.LogNames.append(nm.strip())
-            else:
-                self.LogNames = ''
-        else:
-            self.log_Image = ''
 
         self.model_file = config['Digital_Digit']['Modelfile']
         self.model = load_model(self.model_file)
