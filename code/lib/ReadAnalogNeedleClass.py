@@ -5,7 +5,7 @@ from PIL import Image
 import numpy as np
 import glob
 import os
-import cv2
+#import cv2
 import configparser
 import math
 import time
@@ -19,6 +19,7 @@ class ReadAnalogNeedle:
         self.log_Image = ''
         self.LogNames = ''
 
+
         if config.has_option('Analog_Counter', 'LogImageLocation'):
             self.log_Image = config['Analog_Counter']['LogImageLocation']
             if config.has_option('Analog_Counter', 'LogNames'):
@@ -26,6 +27,10 @@ class ReadAnalogNeedle:
                 self.LogNames = []
                 for nm in zw_LogNames:
                       self.LogNames.append(nm.strip())
+            else:
+                self.LogNames = ''
+        else:
+            self.log_Image = ''
 
         self.model_file = config['Analog_Counter']['Modelfile']
 
@@ -64,8 +69,8 @@ class ReadAnalogNeedle:
         return self.result
 
     def ReadoutSingleImage(self, image):
-        test_image = cv2.resize(image,(32,32), interpolation = cv2.INTER_CUBIC)
-        cv2.imwrite('./image_tmp/resize.jpg', test_image)
+        test_image = image.resize((32, 32), Image.NEAREST)
+        test_image.save('./image_tmp/resize.jpg', "JPEG")
         test_image = np.array(test_image, dtype="float32")
 #      test_image/=255.
         img = np.reshape(test_image,[1,32,32,3])
@@ -81,4 +86,4 @@ class ReadAnalogNeedle:
             return
         speichername = "{:.1f}".format(value) + '_' +  image[0] + '_' + logtime + '.jpg'
         speichername = self.log_Image + '/' + speichername
-        cv2.imwrite(speichername, image[1])
+        image[1].save(speichername, "JPEG")

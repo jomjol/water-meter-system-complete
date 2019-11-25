@@ -54,6 +54,14 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if 'value' in query_parse:
             value = query_parse['value'][0]
 
+        if ('version' in url_parse.path) or ('ROI' in url_parse.path):
+            result = "Version 4.1.0"
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(bytes(result, 'UTF-8'))
+            return
+
         if ('roi' in url_parse.path) or ('ROI' in url_parse.path):
             result = wasserzaehler.getROI(url)
             self.send_response(200)

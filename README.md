@@ -4,12 +4,10 @@ This repository is the sum of different projects to read out an analog water met
 The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
 
 ## Changelog - lastest version
-##### 3.0.2 (2019-11-07)
-* Correct error for disable Logging
-##### 3.0.1 (2019-11-03)
-* Update to Pillow 6.2.0
-##### 3.0.0 (2019-10-06)
-* Impementation of optional consistency check of readout value (not negative, maximum rate)
+##### 4.1.0 (2019-11-25)
+* Upgrade to Tensorflow 2.0
+* Changed image processing within CNN to Pillow (instead of OpenCV)
+
 ### [Full Changelog](Changelog.md)
 
 
@@ -87,6 +85,7 @@ Example with parameter `full`:
 
 The page `roi.html` return the image including the ROIs visible. This is usefull to check for correct setting:
 <img src="./images/roi_masked.jpg" width="400">
+Since version 4.1.0 also a middle cross and a circle for supporting the alignment is implemented.
 
 * http://server-ip:3000/setPreValue.html?value=401.57
 
@@ -96,9 +95,9 @@ The page `setPreValue.html` stores the number given in the parameter `value` to 
 | --------- | ------- | ------- |
 | value | valid setting of water meter readout | `value=401.57` |
 
+* http://server-ip:3000/version.html
 
-
-
+The page `version.html` returns a version number.
    
 
 

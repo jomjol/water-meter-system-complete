@@ -3,9 +3,7 @@ import cv2
 import configparser
 import os
 from shutil import copyfile
-
-
-
+from PIL import Image
 
 class CutImage:
     def __init__(self):
@@ -113,7 +111,9 @@ class CutImage:
             crop_img = source[y:y+dy, x:x+dx]
             name = './image_tmp/' + zeiger[0] + '.jpg'
             cv2.imwrite(name, crop_img)
-            singleresult = [zeiger[0], crop_img]
+            crop_img = cv2.cvtColor(crop_img, cv2.COLOR_BGR2RGB)
+            im_pil = Image.fromarray(crop_img)
+            singleresult = [zeiger[0], im_pil]
             result.append(singleresult)
         return result
 
@@ -124,7 +124,9 @@ class CutImage:
             crop_img = source[y:y+dy, x:x+dx]
             name = './image_tmp/' + zeiger[0] + '.jpg'
             cv2.imwrite(name, crop_img)
-            singleresult = [zeiger[0], crop_img]
+            crop_img = cv2.cvtColor(crop_img, cv2.COLOR_BGR2RGB)
+            im_pil = Image.fromarray(crop_img)
+            singleresult = [zeiger[0], im_pil]
             result.append(singleresult)
         return result
 
@@ -168,6 +170,7 @@ class CutImage:
         im = cv2.imread(url)
 
         d = 2
+        d_eclipse = 1
 
         x = self.reference_p0[0]
         y = self.reference_p0[1]
@@ -190,10 +193,14 @@ class CutImage:
         for zeiger in self.Analog_Counter:
             x, y, w, h = zeiger[1]
             cv2.rectangle(im,(x-d,y-d),(x+w+2*d,y+h+2*d),(0,255,0),d)
+            xct = int(x+w/2)+1
+            yct = int(y+h/2)+1
+            cv2.line(im,(xct-5,yct),(xct+5,yct),(0,255,0),1)
+            cv2.line(im,(xct,yct-5),(xct,yct+5),(0,255,0),1)
+            cv2.ellipse(im, (xct, yct), (int(w/2)+2*d_eclipse, int(h/2)+2*d_eclipse), 0, 0, 360, (0,255,0), d_eclipse)
             cv2.putText(im,zeiger[0],(x,y-5),0,0.4,(0,255,0))
         for zeiger in self.Digital_Digit:
             x, y, w, h = zeiger[1]
             cv2.rectangle(im,(x-d,y-d),(x+w+2*d,y+h+2*d),(0,255,0),d)
             cv2.putText(im,zeiger[0],(x,y-5),0,0.4,(0,255,0))
         cv2.imwrite('./image_tmp/roi.jpg', im)
-

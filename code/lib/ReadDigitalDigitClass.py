@@ -1,4 +1,3 @@
-#import keras
 from tensorflow.keras.models import load_model
 
 import tensorflow as tf 
@@ -11,6 +10,7 @@ import configparser
 import math
 import time
 from shutil import copyfile
+from PIL import Image 
 
 class ReadDigitalDigit:
     def __init__(self):
@@ -40,6 +40,10 @@ class ReadDigitalDigit:
                 self.LogNames = []
                 for nm in zw_LogNames:
                       self.LogNames.append(nm.strip())
+            else:
+                self.LogNames = ''
+        else:
+            self.log_Image = ''
 
         self.model_file = config['Digital_Digit']['Modelfile']
         self.model = load_model(self.model_file)
@@ -75,8 +79,10 @@ class ReadDigitalDigit:
         return self.result
 
     def ReadoutSingleImage(self, image):
-        test_image = cv2.resize(image,(20,32), interpolation = cv2.INTER_CUBIC)
-        cv2.imwrite('./image_tmp/resize.jpg', test_image)
+        test_image = image.resize((20, 32), Image.NEAREST)
+#        test_image = cv2.resize(image,(20,32), interpolation = cv2.INTER_CUBIC)
+        test_image.save('./image_tmp/resize.jpg', "JPEG")
+#        cv2.imwrite('./image_tmp/resize.jpg', test_image)
         test_image = np.array(test_image, dtype="float32")
 #      test_image/=255.
         img = np.reshape(test_image,[1,32,20,3])
