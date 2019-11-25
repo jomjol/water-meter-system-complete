@@ -7,6 +7,7 @@ The result is a HTTP-server, that takes an image as input, processes it and give
 ##### 4.1.0 (2019-11-25)
 * Upgrade to Tensorflow 2.0
 * Changed image processing within CNN to Pillow (instead of OpenCV)
+* Training analog and digital CNN with additional type of counter and digits respectivelely
 
 ### [Full Changelog](Changelog.md)
 
