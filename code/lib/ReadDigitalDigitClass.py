@@ -98,4 +98,5 @@ class ReadDigitalDigit:
             return
         speichername = image[0] + '_' + logtime + '.jpg'
         speichername = self.log_Image + '/' + str(value) + '/' + speichername
-        cv2.imwrite(speichername, image[1])
+        image[1].save(speichername, "JPEG")
+#        cv2.imwrite(speichername, image[1])
