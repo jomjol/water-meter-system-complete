@@ -10,7 +10,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     
     def do_GET(self):
         global wasserzaehler
-        #Test for GitHub
+        #Test for GitHubfff
         url_parse = parse.urlparse(self.path)
         query_parse = parse.parse_qs(url_parse.query)
 
