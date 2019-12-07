@@ -40,6 +40,12 @@ Options for ErrorReturn are the following:
 * `ErrorMessage` = attach to value a reason for the inconistent value (max rate or negative)
 * `Readout` = attach the original readout - usefull, if the OldValue is given back to see, what the readout really was
 
+## Enable/Disable AnalogReadOut
+#### Main section [AnalogReadOut]
+Enable or disable the readout of the analog counter.
+| Parameter        | Meaning           | Example        |
+| ------------- | ------------- | ------------- |
+| Enabled | Diable or Enable the read out of the analog counters | `Enabled=True` or `Enabled=False` |
 
 
 ## Alignment

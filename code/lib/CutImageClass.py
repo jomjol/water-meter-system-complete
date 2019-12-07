@@ -28,6 +28,12 @@ class CutImage:
         self.ref1 = cv2.imread(self.reference_image1)
         self.ref2 = cv2.imread(self.reference_image2)
 
+        self.AnalogReadOutEnabled = True
+        if config.has_option('AnalogReadOut', 'Enabled'):
+            self.AnalogReadOutEnabled = config['AnalogReadOut']['Enabled']
+            if self.AnalogReadOutEnabled.upper() == 'FALSE':
+                self.AnalogReadOutEnabled = False
+
 
         zw_Analog_Counter = config.get('Analog_Counter', 'names').split(',')
         self.Analog_Counter = []
@@ -100,6 +106,10 @@ class CutImage:
 
         zeiger = self.cutZeiger(target)
         ziffern = self.cutZiffern(target)
+
+        zeiger = ziffern
+        if self.AnalogReadOutEnabled:
+            zeiger = self.cutZeiger(target)
 
         return [zeiger, ziffern]
 

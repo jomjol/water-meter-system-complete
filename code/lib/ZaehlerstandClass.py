@@ -15,8 +15,19 @@ class Zaehlerstand:
         config.read('./config/config.ini')
 
         print('Start Init Zaehlerstand')
-        self.readAnalogNeedle = lib.ReadAnalogNeedleClass.ReadAnalogNeedle()
-        print('Analog Model Init Done')
+
+        self.AnalogReadOutEnabled = True
+        if config.has_option('AnalogReadOut', 'Enabled'):
+            self.AnalogReadOutEnabled = config['AnalogReadOut']['Enabled']
+            if self.AnalogReadOutEnabled.upper() == 'FALSE':
+                self.AnalogReadOutEnabled = False
+
+        if self.AnalogReadOutEnabled:
+            self.readAnalogNeedle = lib.ReadAnalogNeedleClass.ReadAnalogNeedle()
+            print('Analog Model Init Done')
+        else:
+            print('Analog Model Disabled')
+
         self.readDigitalDigit = lib.ReadDigitalDigitClass.ReadDigitalDigit()
         print('Digital Model Init Done')
         self.CutImage = lib.CutImageClass.CutImage()
@@ -53,11 +64,17 @@ class Zaehlerstand:
         zerlegt = setValue.split('.')
         vorkomma = zerlegt[0][0:len(self.CutImage.Digital_Digit)]
         self.LastVorkomma = vorkomma.zfill(len(self.CutImage.Digital_Digit))
-        nachkomma = zerlegt[1][0:len(self.CutImage.Analog_Counter)]
-        while len(nachkomma) < len(self.CutImage.Analog_Counter):
-            nachkomma = nachkomma + '0'
-        self.LastNachkomma = nachkomma
-        result = 'Last value set to:  ' + self.LastVorkomma + '.' + self.LastNachkomma
+
+        result='N'
+        if self.AnalogReadOutEnabled:
+            nachkomma = zerlegt[1][0:len(self.CutImage.Analog_Counter)]
+            while len(nachkomma) < len(self.CutImage.Analog_Counter):
+                nachkomma = nachkomma + '0'
+            self.LastNachkomma = nachkomma
+            result = 'Last value set to:  ' + self.LastVorkomma + '.' + self.LastNachkomma
+        else:
+            result = 'Last value set to:  ' + self.LastVorkomma
+        
         return result
 
     def getROI(self, url):
@@ -76,12 +93,20 @@ class Zaehlerstand:
         txt, logtime = self.LoadFileFromHTTP.LoadImageFromURL(url, './image_tmp/original.jpg')
 
         if len(txt) == 0:
-            print('Start CutImage, AnalogReadout, DigitalReadout')
+            if self.AnalogReadOutEnabled:
+                print('Start CutImage, AnalogReadout, DigitalReadout')
+            else:
+                print('Start CutImage, DigitalReadout')            
             resultcut = self.CutImage.Cut('./image_tmp/original.jpg')
-            resultanalog = self.readAnalogNeedle.Readout(resultcut[0], logtime)
+
+            resultanalog = 0
+            if self.AnalogReadOutEnabled:
+                resultanalog = self.readAnalogNeedle.Readout(resultcut[0], logtime)
             resultdigital = self.readDigitalDigit.Readout(resultcut[1], logtime)
             
-            self.akt_nachkomma = self.AnalogReadoutToValue(resultanalog)
+            self.akt_nachkomma = 0
+            if self.AnalogReadOutEnabled:
+                self.akt_nachkomma = self.AnalogReadoutToValue(resultanalog)
             self.akt_vorkomma = self.DigitalReadoutToValue(resultdigital, UsePreValue, self.LastNachkomma, self.akt_nachkomma)
             self.LoadFileFromHTTP.PostProcessLogImageProcedure(True)
 
@@ -100,10 +125,11 @@ class Zaehlerstand:
                         zw = str(int(resultdigital[i]))
                     txt += '<img src=/image_tmp/'+  str(resultcut[1][i][0]) + '.jpg></img>' + zw
                 txt = txt + '<p>'
-                txt = txt + 'Analog Meter: <p>'
-                for i in range(len(resultanalog)):
-                    txt += '<img src=/image_tmp/'+  str(resultcut[0][i][0]) + '.jpg></img>' + "{:.1f}".format(resultanalog[i])
-                txt = txt + '<p>'
+                if self.AnalogReadOutEnabled:
+                    txt = txt + 'Analog Meter: <p>'
+                    for i in range(len(resultanalog)):
+                        txt += '<img src=/image_tmp/'+  str(resultcut[0][i][0]) + '.jpg></img>' + "{:.1f}".format(resultanalog[i])
+                    txt = txt + '<p>'
             print('Get Zaehlerstand done')
         return txt
 
@@ -111,17 +137,25 @@ class Zaehlerstand:
         output = ''
         if (error):
             if self.ErrorReturn.find('Value') > -1:
-                output = str(self.akt_vorkomma.lstrip("0")) + '.' + str(self.akt_nachkomma)
+                output = str(self.akt_vorkomma.lstrip("0"))
+                if self.AnalogReadOutEnabled:
+                    output = output + '.' + str(self.akt_nachkomma)
                 if not single:
-                    output = output + '\t' + self.akt_vorkomma  + '\t' + self.akt_nachkomma
+                    output = output + '\t' + self.akt_vorkomma
+                    if self.AnalogReadOutEnabled:
+                        output = output + '\t' + self.akt_nachkomma
             if len(output) > 0:
                 output = output + '\t' + errortxt
             else:
                  output = errortxt
         else:
-            output = str(self.akt_vorkomma.lstrip("0")) + '.' + str(self.akt_nachkomma)
+            output = str(self.akt_vorkomma.lstrip("0"))
+            if self.AnalogReadOutEnabled:
+                output = output + '.' + str(self.akt_nachkomma)
             if not single:
-                output = output + '\t' + self.akt_vorkomma  + '\t' + self.akt_nachkomma
+                output = output + '\t' + self.akt_vorkomma
+                if self.AnalogReadOutEnabled:
+                    output = output + '\t' + self.akt_nachkomma
         return output
 
     def UpdateLastValues(self, error):
