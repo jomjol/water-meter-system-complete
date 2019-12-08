@@ -56,7 +56,7 @@ class LoadFileFromHttp:
         action_process = Process(target=self.ReadURL, args=(event, url, target))
         action_process.start()
         action_process.join(timeout=self.TimeoutLoadImage)
-        action_process.terminate()
+        action_process.close()
 
         logtime = time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())
         if event.is_set():
