@@ -1,5 +1,5 @@
 from tensorflow.keras.models import load_model
-
+import tensorflow.keras.backend as K
 import tensorflow as tf 
 from PIL import Image
 import numpy as np
@@ -80,13 +80,11 @@ class ReadDigitalDigit:
 
     def ReadoutSingleImage(self, image):
         test_image = image.resize((20, 32), Image.NEAREST)
-#        test_image = cv2.resize(image,(20,32), interpolation = cv2.INTER_CUBIC)
         test_image.save('./image_tmp/resize.jpg', "JPEG")
-#        cv2.imwrite('./image_tmp/resize.jpg', test_image)
         test_image = np.array(test_image, dtype="float32")
-#      test_image/=255.
         img = np.reshape(test_image,[1,32,20,3])
         result = self.model.predict_classes(img)
+        K.clear_session()
         if result == 10:
             result = "NaN"
         else:
@@ -99,4 +97,4 @@ class ReadDigitalDigit:
         speichername = image[0] + '_' + logtime + '.jpg'
         speichername = self.log_Image + '/' + str(value) + '/' + speichername
         image[1].save(speichername, "JPEG")
-#        cv2.imwrite(speichername, image[1])
+
