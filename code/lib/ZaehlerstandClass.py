@@ -90,6 +90,8 @@ class Zaehlerstand:
 
 
     def getZaehlerstand(self, url, simple = True, UsePreValue = False, single = False, ignoreConsistencyCheck = False):
+        #txt = ""
+        #logtime="test"
         txt, logtime = self.LoadFileFromHTTP.LoadImageFromURL(url, './image_tmp/original.jpg')
 
         if len(txt) == 0:
@@ -99,7 +101,8 @@ class Zaehlerstand:
                 print('Start CutImage, DigitalReadout')            
             resultcut = self.CutImage.Cut('./image_tmp/original.jpg')
 
-            resultanalog = 0
+            #resultanalog = [0, 0, 0, 0]
+            #resultdigital = [1, 2, 3, 4, 5]
             if self.AnalogReadOutEnabled:
                 resultanalog = self.readAnalogNeedle.Readout(resultcut[0], logtime)
             resultdigital = self.readDigitalDigit.Readout(resultcut[1], logtime)
