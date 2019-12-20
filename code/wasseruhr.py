@@ -6,6 +6,8 @@ import subprocess
 
 import socketserver
 
+import gc
+
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     
     def do_GET(self):
@@ -20,6 +22,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             result = 'Konfiguration wird neu geladen'
             self.wfile.write(bytes(result, 'UTF-8'))             
             del wasserzaehler
+            gc.collect()
             wasserzaehler = lib.ZaehlerstandClass.Zaehlerstand()
             return
            
