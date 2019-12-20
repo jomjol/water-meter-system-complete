@@ -4,6 +4,8 @@ This repository is the sum of different projects to read out an analog water met
 The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
 
 ## Changelog - lastest version
+##### 4.2.1 (2019-12-17)
+* Workaround for memory leak in tensorflow function predict() - see [https://github.com/keras-team/keras/issues/13118](https://github.com/keras-team/keras/issues/13118)
 ##### 4.2.0 (2019-12-07)
 * Reading of analog counters is enabled or disabled via config.ini **special thanks to alikanarya**
 ##### 4.1.1 (2019-11-29)

@@ -55,7 +55,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             value = query_parse['value'][0]
 
         if ('version' in url_parse.path) or ('ROI' in url_parse.path):
-            result = "Version 4.1.0"
+            result = "Version 4.2.1"
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()

@@ -1,5 +1,5 @@
-#import keras
 from tensorflow.keras.models import load_model
+import tensorflow.keras.backend as K
 import tensorflow as tf 
 from PIL import Image
 import numpy as np
@@ -72,11 +72,11 @@ class ReadAnalogNeedle:
         test_image = image.resize((32, 32), Image.NEAREST)
         test_image.save('./image_tmp/resize.jpg', "JPEG")
         test_image = np.array(test_image, dtype="float32")
-#      test_image/=255.
         img = np.reshape(test_image,[1,32,32,3])
         classes = self.model.predict(img)
         out_sin = classes[0][0]
         out_cos = classes[0][1]
+        K.clear_session()
         result =  np.arctan2(out_sin, out_cos)/(2*math.pi) % 1
         result = result * 10
         return result
