@@ -49,11 +49,11 @@ The config and the log directory can be empty at the very first start. They will
 ### [Full Changelog](https://github.com/jomjol/water-meter-system-complete/blob/raspi-rolling/Changelog.md)
 
 
-The overall system with description of the single steps is described here: [https://github.com/jomjol/water-meter-measurement-system](https://github.com/jomjol/water-meter-measurement-system)
+The overall system with description of the single steps is described here: [https://github.com/jomjol/water-meter-measurement-system](https://github.com/jomjol/water-meter-measurement-system]()
 
 A graphical overview about the steps is shown in the following flow:
 
-<img srchttps://raw.githubusercontent.com/jomjol/water-meter-system-complete/raspi-rolling/images/signal_flow.png", width=800> 
+<img src="https://raw.githubusercontent.com/jomjol/water-meter-system-complete/raspi-rolling/images/signal_flow.png", width=800> 
 
 ## Setup
 
