@@ -7,8 +7,8 @@ Although the server can be installed manually in a windows as well as an Linux s
 
 
 ## Docker-Versions
-| Label | 	Content  | Comments
-| -------------- | -------------|
+| Label | 	Content  | Comments   |
+| -------------- | ------------- | ------------- |
 | rolling | Experimental version for amd64-systems (e.g. Intel processors) | newest features, not fully tested |
 | raspi-rolling | Experimental version for armv7-systems (Raspberry PI3 and higher) | newest features, not fully tested  |
 | latest | Latest stable version for amd64-systems (e.g. Intel processors) | Currently identical to v4.2.1 (2019-12-27) |
@@ -24,7 +24,7 @@ Choose for the fitting docker tag and run the server with the following paramete
 
 #### Paramters
 | Parameter | 	Meaning  | Example |
-| -------------- | -------------|
+| -------------- | ------------- | ------------- |
 | PATH_TO_LOCAL_CONFIG | Configuration parameters are stored in this path - easeast way to handle is a local copy of this directory | ```/home/pi/config``` |
 | PATH_TO_LOCAL_LOG | Logging paramters and images are stored in in this path - easeast way to handle is a local copy of this directory | ```/home/pi/config``` |
 | DOCKER_TAG | Docker tag for the correct docker version | ```raspi-latest``` |
