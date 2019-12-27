@@ -100,6 +100,7 @@ class Zaehlerstand:
             else:
                 print('Start CutImage, DigitalReadout')            
             resultcut = self.CutImage.Cut('./image_tmp/original.jpg')
+            self.CutImage.DrawROI('./image_tmp/alg.jpg')  # update ROI
 
             #resultanalog = [0, 0, 0, 0]
             #resultdigital = [1, 2, 3, 4, 5]
