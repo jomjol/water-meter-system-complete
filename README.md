@@ -33,6 +33,8 @@ The config and the log directory can be empty at the very first start. They will
 
 
 ## Changelog - lastest version
+##### 4.4.0 (2019-12-27)
+* Change to new base image: export OpenCV and Tensorflow in new base images (for Raspberry and Synology Version)
 ##### 4.3.0 (2019-12-20)
 * Update roi.jpg on every run
 ##### 4.2.1 (2019-12-17)
