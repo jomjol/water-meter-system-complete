@@ -1,7 +1,36 @@
 # water-meter-system-complete
 
-This repository is the sum of different projects to read out an analog water meter with the help of a camera and image processing, including neural network processing to extract the values.
-The result is a HTTP-server, that takes an image as input, processes it and gives as an output the water meter number, including the subdigits.
+This repository describes a readout of an analog water meter with the help of a camera and image processing, including neural network processing to extract the values.
+The interface is a local HTTP-server, that takes an image as input, processes it and gives as an output the readout of the water meter counter, including the subdigits.
+
+Although the server can be installed manually in a windows as well as an Linux system, it is strongly recommended to use the provided docker containers. The installation is due to the use of image processing (OpenCV, ...) and Neural Network Systems (Tensorflow) not really straight forward and I needed a lot of try and error. **Therefore I have decided to capsule the server in a docker container**. This is available for an Intel based System (e.g. Synology Docker) as well as an Raspberry PI Version.
+
+
+## Docker-Versions
+| Label | 	Content  | Comments
+| -------------- | -------------|
+| rolling | Experimental version for amd64-systems (e.g. Intel processors) | newest features, not fully tested |
+| raspi-rolling | Experimental version for armv7-systems (Raspberry PI3 and higher) | newest features, not fully tested  |
+| latest | Latest stable version for amd64-systems (e.g. Intel processors) | Currently identical to v4.2.1 (2019-12-27) |
+| raspi-latest | Latest stable version for armv7-systems (Raspberry PI3 and higher) | Currently identical to v4.2.1 (2019-12-27) |
+| v4.x | Update to Tensorflow 2.0, fully automated build | Details see below |
+| v3.x | Tensorflow 1.4, manual build | Details see below  |
+
+
+## Running docker
+Choose for the fitting docker tag and run the server with the following parameters:
+
+```sudo docker run -p 3000:3000 --mount type=bind,source=/PATH_TO_LOCAL_CONFIG, target=/config --mount type=bind,source=/PATH_TO_LOCAL_LOG,target=/log jomjol/wasserzaehler:DOCKER_TAG```
+
+#### Paramters
+| Parameter | 	Meaning  | Example |
+| -------------- | -------------|
+| PATH_TO_LOCAL_CONFIG | Configuration parameters are stored in this path - easeast way to handle is a local copy of this directory | ```/home/pi/config``` |
+| PATH_TO_LOCAL_LOG | Logging paramters and images are stored in in this path - easeast way to handle is a local copy of this directory | ```/home/pi/config``` |
+| DOCKER_TAG | Docker tag for the correct docker version | ```raspi-latest``` |
+
+The config and the log directory can be empty at the very first start. They will be loaded with a default configuratio, that can be modified afterwards.
+
 
 ## Changelog - lastest version
 ##### 4.3.0 (2019-12-20)
@@ -17,14 +46,14 @@ The result is a HTTP-server, that takes an image as input, processes it and give
 * Changed image processing within CNN to Pillow (instead of OpenCV)
 * Training analog and digital CNN with additional type of counter and digits respectivelely
 
-### [Full Changelog](Changelog.md)
+### [Full Changelog](https://github.com/jomjol/water-meter-system-complete/blob/raspi-rolling/Changelog.md)
 
 
 The overall system with description of the single steps is described here: [https://github.com/jomjol/water-meter-measurement-system](https://github.com/jomjol/water-meter-measurement-system)
 
 A graphical overview about the steps is shown in the following flow:
 
-<img src="./images/signal_flow.png"> 
+<img srchttps://raw.githubusercontent.com/jomjol/water-meter-system-complete/raspi-rolling/images/signal_flow.png", width=800> 
 
 ## Setup
 
