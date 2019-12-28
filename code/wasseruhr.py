@@ -71,6 +71,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/html')
             self.end_headers()
             self.wfile.write(bytes(result, 'UTF-8'))
+            print('Crash with division by zero!')
             a = 1
             b = 0
             c = a/b
