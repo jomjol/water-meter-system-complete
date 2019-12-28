@@ -55,7 +55,7 @@ The overall system with description of the single steps is described here: [http
 
 A graphical overview about the steps is shown in the following flow:
 
-<img src="https://raw.githubusercontent.com/jomjol/water-meter-system-complete/raspi-rolling/images/signal_flow.png", width="800"> 
+<img src="https://raw.githubusercontent.com/jomjol/water-meter-system-complete/raspi-rolling/images/signal_flow.png" width="800"> 
 
 ## Setup
 
