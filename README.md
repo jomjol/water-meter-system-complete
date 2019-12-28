@@ -3,7 +3,11 @@
 This repository describes a readout of an analog water meter with the help of a camera and image processing, including neural network processing to extract the values.
 The interface is a local HTTP-server, that takes an image as input, processes it and gives as an output the readout of the water meter counter, including the subdigits.
 
-Although the server can be installed manually in a windows as well as an Linux system, it is strongly recommended to use the provided docker containers. The installation is due to the use of image processing (OpenCV, ...) and Neural Network Systems (Tensorflow) not really straight forward and I needed a lot of try and error. **Therefore I have decided to capsule the server in a docker container**. This is available for an Intel based System (e.g. Synology Docker) as well as an Raspberry PI Version.
+Although the server can be installed manually in a windows as well as an Linux system, it is strongly recommended to use the provided docker containers. The installation is due to the use of image processing (OpenCV, ...) and Neural Network Systems (Tensorflow) not really straight forward and I needed a lot of try and error. 
+
+**Therefore I have decided to capsule the server in a docker container**. 
+
+This is available for an Intel based System (e.g. Synology Docker) as well as an Raspberry PI Version.
 
 
 ## Docker-Versions
@@ -11,8 +15,8 @@ Although the server can be installed manually in a windows as well as an Linux s
 | -------------- | ------------- | ------------- |
 | rolling | Experimental version for amd64-systems (e.g. Intel processors) | newest features, not fully tested |
 | raspi-rolling | Experimental version for armv7-systems (Raspberry PI3 and higher) | newest features, not fully tested  |
-| latest | Latest stable version for amd64-systems (e.g. Intel processors) | Currently identical to v4.2.1 (2019-12-27) |
-| raspi-latest | Latest stable version for armv7-systems (Raspberry PI3 and higher) | Currently identical to v4.2.1 (2019-12-27) |
+| latest | Latest stable version for amd64-systems (e.g. Intel processors) | Currently identical to v5.0.0 (2019-12-28) |
+| raspi-latest | Latest stable version for armv7-systems (Raspberry PI3 and higher) | Currently identical to v5.0.0 (2019-12-28) |
 | v4.x | Update to Tensorflow 2.0, fully automated build | Details see below |
 | v3.x | Tensorflow 1.4, manual build | Details see below  |
 
@@ -38,7 +42,7 @@ The config and the log directory can be empty at the very first start. They will
 ### [Full Changelog](https://github.com/jomjol/water-meter-system-complete/blob/raspi-rolling/Changelog.md)
 
 
-The overall system with description of the single steps is described here: [https://github.com/jomjol/water-meter-measurement-system](https://github.com/jomjol/water-meter-measurement-system]()
+The overall system with description of the single steps is described here: [https://github.com/jomjol/water-meter-measurement-system](https://github.com/jomjol/water-meter-measurement-system)
 
 A graphical overview about the steps is shown in the following flow:
 
@@ -48,7 +52,7 @@ A graphical overview about the steps is shown in the following flow:
 
 To run the Python code copy the whole [code](code) directory including subdirectory.
 
-Path are relative, so it should run immediatly with the following command:
+Path are relative, so it should run immediately with the following command:
 * `pip install requirements.txt`
 * `python wasserzaehler.py`
 
