@@ -57,6 +57,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if 'value' in query_parse:
             value = query_parse['value'][0]
 
+        if ('crash' in url_parse.path):
+            a = 1
+            b = 0
+            c = a / b
+            return
+
         if ('version' in url_parse.path) or ('ROI' in url_parse.path):
             result = "Version 5.0.0"
             self.send_response(200)
