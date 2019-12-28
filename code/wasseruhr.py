@@ -65,6 +65,17 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(bytes(result, 'UTF-8'))
             return
 
+        if ('crash' in url_parse.path):
+            result = "Crash in a second"
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(bytes(result, 'UTF-8'))
+            a = 1
+            b = 0
+            c = a/b
+            return
+
         if ('roi' in url_parse.path) or ('ROI' in url_parse.path):
             result = wasserzaehler.getROI(url)
             self.send_response(200)
