@@ -24,7 +24,7 @@ This is available for an Intel based System (e.g. Synology Docker) as well as an
 ## Running docker
 Choose for the fitting docker tag and run the server with the following parameters:
 
-```sudo docker run -p 3000:3000 --mount type=bind,source=/PATH_TO_LOCAL_CONFIG, target=/config --mount type=bind,source=/PATH_TO_LOCAL_LOG,target=/log jomjol/wasserzaehler:DOCKER_TAG```
+```sudo docker run -p 3000:3000 -e WASSERZAEHLER_HTTP_PORT=3000 --mount type=bind,source=/PATH_TO_LOCAL_CONFIG, target=/config --mount type=bind,source=/PATH_TO_LOCAL_LOG,target=/log jomjol/wasserzaehler:DOCKER_TAG```
 
 #### Paramters
 | Parameter | 	Meaning  | Example |
@@ -34,6 +34,8 @@ Choose for the fitting docker tag and run the server with the following paramete
 | DOCKER_TAG | Docker tag for the correct docker version | ```raspi-latest``` |
 
 The config and the log directory can be empty at the very first start. They will be loaded with a default configuratio, that can be modified afterwards.
+
+If you want to run the HTTP server on a port other than 3000, replace all three occurrences in the commandline with the desired port number.
 
 ## Changelog - lastest version
 ##### 5.0.0 (2019-12-28)
