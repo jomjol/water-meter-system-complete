@@ -11,4 +11,4 @@ RUN [ "cross-build-end" ]
 
 EXPOSE 3000
 
-CMD ["/bin/bash", "./restart.sh"]
+CMD ["python", "./wasseruhr.py"]
