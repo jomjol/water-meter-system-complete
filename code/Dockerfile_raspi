@@ -11,4 +11,4 @@ RUN [ "cross-build-end" ]
 
 EXPOSE 3000
 
-CMD ["python", "./wasseruhr.py"]
+CMD ["python3", "./wasseruhr.py"]
