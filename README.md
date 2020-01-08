@@ -36,6 +36,9 @@ Choose for the fitting docker tag and run the server with the following paramete
 The config and the log directory can be empty at the very first start. They will be loaded with a default configuratio, that can be modified afterwards.
 
 ## Changelog - lastest version
+##### 5.3.0 (2019-01-08)
+* Integration of storage of prevalue in file to reload on startup
+* Correction of drawing analog counter ROIs even if they are disabled
 ##### 5.2.0 (2019-01-03)
 * Raspberry Version: Remove autorestart (not working) - instead: use cron job for regular restart to handle tensorflow memory leak [Setting up cron job](https://github.com/jomjol/water-meter-system-complete/blob/raspi-rolling/Raspi-Cron-Job.md)
 ##### 5.1.0 (2019-12-28)
