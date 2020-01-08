@@ -30,6 +30,8 @@ Here a consistency check of the readout value with respect to the previous full 
 | Parameter        | Meaning           | Example        |
 | ------------- | ------------- | ------------- |
 | Enabled | Diable or Enable the Check | `Enabled=True` |
+| ReadPreValueFromFileAtStartup | Diable or Enable the Reading of the prevalue from file at Startup | `ReadPreValueFromFileAtStartup=True` |
+| ReadPreValueFromFileMaxAge | Maximum timedifference between last storage of prevalue in file and start in minutes | `ReadPreValueFromFileMaxAge=30` |
 | AllowNegativeRates | If set to `False`, then only increasing counter values are accepted | `AllowNegativeRates=False` |
 | MaxRateValue | Maximum absolute change from the previous value (+/-) | `MaxRateValue=0.1` |
 | ErrorReturn | Return value, in case of unconsistent values | `ErrorReturn=OldValue, ErrorMessage, Readout` |
