@@ -200,15 +200,16 @@ class CutImage:
         cv2.rectangle(im,(x-d,y-d),(x+w+2*d,y+h+2*d),(0,0,255),d)
         cv2.putText(im,'ref2',(x,y-5),0,0.4,(0,0,255))
 
-        for zeiger in self.Analog_Counter:
-            x, y, w, h = zeiger[1]
-            cv2.rectangle(im,(x-d,y-d),(x+w+2*d,y+h+2*d),(0,255,0),d)
-            xct = int(x+w/2)+1
-            yct = int(y+h/2)+1
-            cv2.line(im,(xct-5,yct),(xct+5,yct),(0,255,0),1)
-            cv2.line(im,(xct,yct-5),(xct,yct+5),(0,255,0),1)
-            cv2.ellipse(im, (xct, yct), (int(w/2)+2*d_eclipse, int(h/2)+2*d_eclipse), 0, 0, 360, (0,255,0), d_eclipse)
-            cv2.putText(im,zeiger[0],(x,y-5),0,0.4,(0,255,0))
+        if self.AnalogReadOutEnabled:
+            for zeiger in self.Analog_Counter:
+                x, y, w, h = zeiger[1]
+                cv2.rectangle(im,(x-d,y-d),(x+w+2*d,y+h+2*d),(0,255,0),d)
+                xct = int(x+w/2)+1
+                yct = int(y+h/2)+1
+                cv2.line(im,(xct-5,yct),(xct+5,yct),(0,255,0),1)
+                cv2.line(im,(xct,yct-5),(xct,yct+5),(0,255,0),1)
+                cv2.ellipse(im, (xct, yct), (int(w/2)+2*d_eclipse, int(h/2)+2*d_eclipse), 0, 0, 360, (0,255,0), d_eclipse)
+                cv2.putText(im,zeiger[0],(x,y-5),0,0.4,(0,255,0))
         for zeiger in self.Digital_Digit:
             x, y, w, h = zeiger[1]
             cv2.rectangle(im,(x-d,y-d),(x+w+2*d,y+h+2*d),(0,255,0),d)
