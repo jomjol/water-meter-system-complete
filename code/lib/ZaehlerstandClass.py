@@ -56,10 +56,12 @@ class Zaehlerstand:
         self.LastVorkomma = ''
         self.LastNachkomma = ''
 
+        ReadPreValueFromFileMaxAge = 0
         if config.has_option('ConsistencyCheck', 'ReadPreValueFromFileMaxAge'):
             ReadPreValueFromFileMaxAge = int(config['ConsistencyCheck']['ReadPreValueFromFileMaxAge'])
-        if config['ConsistencyCheck']['ReadPreValueFromFileAtStartup']:
-            self.prevalueLoadFromFile(ReadPreValueFromFileMaxAge)
+        if config.has_option('ConsistencyCheck', 'ReadPreValueFromFileAtStartup'):
+            if config['ConsistencyCheck']['ReadPreValueFromFileAtStartup']:
+                self.prevalueLoadFromFile(ReadPreValueFromFileMaxAge)
 
     def CheckAndLoadDefaultConfig(self):
         defaultdir = "./config_default/"
