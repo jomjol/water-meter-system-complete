@@ -36,6 +36,8 @@ Choose for the fitting docker tag and run the server with the following paramete
 The config and the log directory can be empty at the very first start. They will be loaded with a default configuratio, that can be modified afterwards.
 
 ## Changelog - lastest version
+##### 5.4.0 (2019-01-26)
+* Extensdion to json output: ../wasserzaeher.json
 ##### 5.3.0 (2019-01-08)
 * Integration of storage of prevalue in file to reload on startup
 * Correction of drawing analog counter ROIs even if they are disabled

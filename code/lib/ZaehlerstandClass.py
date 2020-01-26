@@ -8,6 +8,7 @@ import os
 from shutil import copyfile
 import time
 from datetime import datetime
+import json
 
 class Zaehlerstand:
     def __init__(self):
@@ -183,6 +184,90 @@ class Zaehlerstand:
                     txt = txt + '<p>'
             print('Get Zaehlerstand done')
         return txt
+
+    
+    def getZaehlerstandJSON(self, url, simple = True, UsePreValue = False, single = False, ignoreConsistencyCheck = False):
+        #txt = ""
+        #logtime="test"
+        Value = ""
+        Digit = ""
+        AnalogCounter = ""
+        Error = ""        
+        txt, logtime = self.LoadFileFromHTTP.LoadImageFromURL(url, './image_tmp/original.jpg')
+
+        zw = self.LastVorkomma.lstrip("0") + "." + self.LastNachkomma
+        preval = {
+            "Value": zw,
+            "DigitalDigits": self.LastVorkomma,
+            "AnalogCounter": self.LastNachkomma,
+            }
+
+        if len(txt) == 0:
+            if self.AnalogReadOutEnabled:
+                print('Start CutImage, AnalogReadout, DigitalReadout')
+            else:
+                print('Start CutImage, DigitalReadout')            
+            resultcut = self.CutImage.Cut('./image_tmp/original.jpg')
+            self.CutImage.DrawROI('./image_tmp/alg.jpg')  # update ROI
+
+            #resultanalog = [0, 0, 0, 0]
+            #resultdigital = [1, 2, 3, 4, 5]
+            if self.AnalogReadOutEnabled:
+                resultanalog = self.readAnalogNeedle.Readout(resultcut[0], logtime)
+            resultdigital = self.readDigitalDigit.Readout(resultcut[1], logtime)
+            
+            self.akt_nachkomma = 0
+            if self.AnalogReadOutEnabled:
+                self.akt_nachkomma = self.AnalogReadoutToValue(resultanalog)
+            self.akt_vorkomma = self.DigitalReadoutToValue(resultdigital, UsePreValue, self.LastNachkomma, self.akt_nachkomma)
+            self.LoadFileFromHTTP.PostProcessLogImageProcedure(True)
+
+            print('Start Making Zaehlerstand')
+            (error, errortxt) = self.checkConsistency(ignoreConsistencyCheck)
+            self.UpdateLastValues(error)
+
+            (Value, AnalogCounter, Digit, Error) = self.MakeReturnValueJSON(error, errortxt, single)
+
+            result = {
+                "Value": Value,
+                "DigitalDigits": Digit,
+                "AnalogCounter": AnalogCounter,
+                "Error": Error,
+                "Prevalue": preval
+                }
+        else:
+            result = {
+                "Value": Value,
+                "DigitalDigits": Digit,
+                "AnalogCounter": AnalogCounter,
+                "Error": txt,
+                "Prevalue": preval
+                }
+
+        txt = json.dumps(result)
+        return txt
+
+    def MakeReturnValueJSON(self, error, errortxt, single):
+        Value = ""
+        AnalogCounter = ""
+        Digit = ""
+        Errortxt = errortxt
+        if (error):
+            if self.ErrorReturn.find('Value') > -1:
+                Digit = str(self.akt_vorkomma.lstrip("0"))
+                Value = str(self.akt_vorkomma.lstrip("0"))
+                if self.AnalogReadOutEnabled:
+                    Value = Value + '.' + str(self.akt_nachkomma)
+                    AnalogCounter = str(self.akt_nachkomma)
+        else:
+            Digit = str(self.akt_vorkomma.lstrip("0"))
+            Value = str(self.akt_vorkomma.lstrip("0"))
+            if self.AnalogReadOutEnabled:
+                Value = Value + '.' + str(self.akt_nachkomma)
+                AnalogCounter = str(self.akt_nachkomma)
+        return (Value, AnalogCounter, Digit, Errortxt)
+
+
 
     def MakeReturnValue(self, error, errortxt, single):
         output = ''
