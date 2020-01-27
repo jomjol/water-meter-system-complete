@@ -254,7 +254,7 @@ class Zaehlerstand:
         Errortxt = errortxt
         if (error):
             if self.ErrorReturn.find('Value') > -1:
-                Digit = str(self.akt_vorkomma.lstrip("0"))
+                Digit = str(self.akt_vorkomma)
                 Value = str(self.akt_vorkomma.lstrip("0"))
                 if self.AnalogReadOutEnabled:
                     Value = Value + '.' + str(self.akt_nachkomma)
