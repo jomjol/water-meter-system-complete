@@ -98,7 +98,8 @@ class Zaehlerstand:
         config = configparser.ConfigParser()
         config.read('./config/prevalue.ini')
         config['PreValue']['LastVorkomma'] = self.LastVorkomma
-        config['PreValue']['LastNachkomma'] = self.LastNachkomma
+        if self.AnalogReadOutEnabled:
+            config['PreValue']['LastNachkomma'] = self.LastNachkomma
         config['PreValue']['Time'] = logtime
         with open('./config/prevalue.ini', 'w') as cfg:
             config.write(cfg)
