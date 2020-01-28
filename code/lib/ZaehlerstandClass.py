@@ -196,7 +196,11 @@ class Zaehlerstand:
         Error = ""        
         txt, logtime = self.LoadFileFromHTTP.LoadImageFromURL(url, './image_tmp/original.jpg')
 
-        zw = self.LastVorkomma.lstrip("0") + "." + self.LastNachkomma
+        if self.AnalogReadOutEnabled:
+            zw = self.LastVorkomma.lstrip("0") + "." + self.LastNachkomma
+        else:
+            zw = self.LastVorkomma.lstrip("0")
+            
         preval = {
             "Value": zw,
             "DigitalDigits": self.LastVorkomma,
