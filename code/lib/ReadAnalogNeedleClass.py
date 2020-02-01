@@ -5,51 +5,27 @@ from PIL import Image
 import numpy as np
 import glob
 import os
-#import cv2
-import configparser
 import math
 import time
 from shutil import copyfile
 
 class ReadAnalogNeedle:
-    def __init__(self):
-        config = configparser.ConfigParser()
-        config.read('./config/config.ini')
+    def __init__(self, readconfig, zwpath='./image_tmp/'):
+        self.PathImageZw = zwpath
+        self.UpdateConfig(readconfig)
 
+    def UpdateConfig(self, readconfig):
         self.log_Image = ''
         self.LogNames = ''
 
+        self.model_file = readconfig.AnalogModelFile()
+        (self.doLog, self.LogNames, self.log_Image) = readconfig.AnalogGetLogInfo()
 
-        if config.has_option('Analog_Counter', 'LogImageLocation'):
-            self.log_Image = config['Analog_Counter']['LogImageLocation']
-            if config.has_option('Analog_Counter', 'LogNames'):
-                zw_LogNames = config.get('Analog_Counter', 'LogNames').split(',')
-                self.LogNames = []
-                for nm in zw_LogNames:
-                      self.LogNames.append(nm.strip())
-            else:
-                self.LogNames = ''
-        else:
-            self.log_Image = ''
-
-        self.model_file = config['Analog_Counter']['Modelfile']
-
-        self.CheckAndLoadDefaultConfig()
+        self.MakeLogFileDirectories()
 
         self.model = load_model(self.model_file)
 
-    def CheckAndLoadDefaultConfig(self):
-        defaultdir = "./config_default/"
-        targetdir = './config/'
-        if not os.path.exists(self.model_file):
-            zerlegt = self.model_file.split('/')
-            pfad = zerlegt[0]
-            for i in range(1, len(zerlegt)-1):
-                pfad = pfad + '/' + zerlegt[i]
-                if not os.path.exists(pfad):
-                    os.makedirs(pfad)
-            defaultmodel = self.model_file.replace(targetdir, defaultdir)
-            copyfile(defaultmodel, self.model_file)
+    def MakeLogFileDirectories(self):
         if len(self.log_Image) > 0:
             if not os.path.exists(self.log_Image):
                 zerlegt = self.log_Image.split('/')
@@ -70,7 +46,7 @@ class ReadAnalogNeedle:
 
     def ReadoutSingleImage(self, image):
         test_image = image.resize((32, 32), Image.NEAREST)
-        test_image.save('./image_tmp/resize.jpg', "JPEG")
+        test_image.save(self.PathImageZw + 'resize.jpg', "JPEG")
         test_image = np.array(test_image, dtype="float32")
         img = np.reshape(test_image,[1,32,32,3])
         classes = self.model.predict(img)

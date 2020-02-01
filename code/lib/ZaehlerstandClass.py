@@ -3,6 +3,7 @@ import lib.ReadAnalogNeedleClass
 import lib.CutImageClass
 import lib.ReadDigitalDigitClass
 import lib.LoadFileFromHTTPClass
+import lib.ReadConfig
 import math
 import os
 from shutil import copyfile
@@ -11,65 +12,31 @@ from datetime import datetime
 
 class Zaehlerstand:
     def __init__(self):
-        self.CheckAndLoadDefaultConfig()
-
-        config = configparser.ConfigParser()
-        config.read('./config/config.ini')
+        readconfig = lib.ReadConfig.ReadConfig('./config/', './config_default/')
 
         print('Start Init Zaehlerstand')
 
-        self.AnalogReadOutEnabled = True
-        if config.has_option('AnalogReadOut', 'Enabled'):
-            self.AnalogReadOutEnabled = config['AnalogReadOut']['Enabled']
-            if self.AnalogReadOutEnabled.upper() == 'FALSE':
-                self.AnalogReadOutEnabled = False
-
+        self.AnalogReadOutEnabled = readconfig.ZaehlerAnalogEnabled()
         if self.AnalogReadOutEnabled:
-            self.readAnalogNeedle = lib.ReadAnalogNeedleClass.ReadAnalogNeedle()
+            self.readAnalogNeedle = lib.ReadAnalogNeedleClass.ReadAnalogNeedle(readconfig)
             print('Analog Model Init Done')
         else:
             print('Analog Model Disabled')
 
-        self.readDigitalDigit = lib.ReadDigitalDigitClass.ReadDigitalDigit()
+        self.readDigitalDigit = lib.ReadDigitalDigitClass.ReadDigitalDigit(readconfig)
         print('Digital Model Init Done')
-        self.CutImage = lib.CutImageClass.CutImage()
+        self.CutImage = lib.CutImageClass.CutImage(readconfig)
         print('Digital Model Init Done')
-        self.LoadFileFromHTTP = lib.LoadFileFromHTTPClass.LoadFileFromHttp()
+        self.LoadFileFromHTTP = lib.LoadFileFromHTTPClass.LoadFileFromHttp(readconfig)
 
-        self.ConsistencyEnabled = False        
-        if config.has_option('ConsistencyCheck', 'Enabled'):
-            self.ConsistencyEnabled = config['ConsistencyCheck']['Enabled']
-            if self.ConsistencyEnabled.upper() == 'TRUE':
-                self.ConsistencyEnabled = True
-
-        self.AllowNegativeRates = True
-        if config.has_option('ConsistencyCheck', 'AllowNegativeRates'):
-            self.AllowNegativeRates = config['ConsistencyCheck']['AllowNegativeRates']
-            if self.AllowNegativeRates.upper() == 'FALSE':
-                self.AllowNegativeRates = False
-
-        if config.has_option('ConsistencyCheck', 'MaxRateValue'):
-            self.MaxRateValue = float(config['ConsistencyCheck']['MaxRateValue'])
-        if config.has_option('ConsistencyCheck', 'ErrorReturn'):
-            self.ErrorReturn = config['ConsistencyCheck']['ErrorReturn']
+        (self.ConsistencyEnabled, self.AllowNegativeRates, self.MaxRateValue, self.ErrorReturn) = readconfig.ZaehlerConsistency()
 
         self.LastVorkomma = ''
         self.LastNachkomma = ''
 
-        ReadPreValueFromFileMaxAge = 0
-        if config.has_option('ConsistencyCheck', 'ReadPreValueFromFileMaxAge'):
-            ReadPreValueFromFileMaxAge = int(config['ConsistencyCheck']['ReadPreValueFromFileMaxAge'])
-        if config.has_option('ConsistencyCheck', 'ReadPreValueFromFileAtStartup'):
-            if config['ConsistencyCheck']['ReadPreValueFromFileAtStartup']:
-                self.prevalueLoadFromFile(ReadPreValueFromFileMaxAge)
-
-    def CheckAndLoadDefaultConfig(self):
-        defaultdir = "./config_default/"
-        targetdir = './config/'
-        if not os.path.exists('./config/config.ini'):
-            copyfile(defaultdir + 'config.ini', targetdir + 'config.ini')
-        if not os.path.exists('./config/prevalue.ini'):
-            copyfile(defaultdir + 'prevalue.ini', targetdir + 'prevalue.ini')
+        (ReadPreValueFromFileAtStartup, ReadPreValueFromFileMaxAge) = readconfig.ZaehlerReadPrevalue()
+        if ReadPreValueFromFileAtStartup:
+            self.prevalueLoadFromFile(ReadPreValueFromFileMaxAge)
 
     def setPreValue(self, setValue):
         zerlegt = setValue.split('.')

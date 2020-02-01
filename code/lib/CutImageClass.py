@@ -5,104 +5,35 @@ import os
 from shutil import copyfile
 from PIL import Image
 
-class CutImage:
-    def __init__(self):
-        config = configparser.ConfigParser()
-        config.read('./config/config.ini')
+class CutImage():
+    def __init__(self, readconfig, zwpath='./image_tmp/'):
+        self.PathImageZw = zwpath
+        self.UpdateConfig(readconfig)
 
-        self.rotateAngle = float(config['alignment']['initial_rotation_angle'])
+    def UpdateConfig(self, readconfig):
+        (self.ConfigOriginalPath, self.ConfigReroutePath) = readconfig.ConfigRerouteConfig()
 
-        self.reference_image0 = config['alignment.ref0']['image']
-        self.reference_p0 = (int(config['alignment.ref0']['pos_x']), int(config['alignment.ref0']['pos_y']))
+        self.rotateAngle = readconfig.CutPreRotateAngle()
+        (self.reference_name, self.reference_pos) = readconfig.CutReferenceParameter()
 
+        self.reference_image = []
+        for i in range(3):
+            self.reference_image.append(cv2.imread(self.ReplacePathToConfig(self.reference_name[i])))
 
-        self.reference_image1 = config['alignment.ref1']['image']
-        self.reference_p1 = (int(config['alignment.ref1']['pos_x']), int(config['alignment.ref1']['pos_y']))
-
-        self.reference_image2 = config['alignment.ref2']['image']
-        self.reference_p2 = (int(config['alignment.ref2']['pos_x']), int(config['alignment.ref2']['pos_y']))
-
-        self.CheckAndLoadDefaultConfig()
-
-        self.ref0 = cv2.imread(self.reference_image0)
-        self.ref1 = cv2.imread(self.reference_image1)
-        self.ref2 = cv2.imread(self.reference_image2)
-
-        self.AnalogReadOutEnabled = True
-        if config.has_option('AnalogReadOut', 'Enabled'):
-            self.AnalogReadOutEnabled = config['AnalogReadOut']['Enabled']
-            if self.AnalogReadOutEnabled.upper() == 'FALSE':
-                self.AnalogReadOutEnabled = False
+        (self.AnalogReadOutEnabled, self.Analog_Counter) = readconfig.CutGetAnalogCounter()
+        (self.Digital_Digit) = readconfig.CutGetDigitalDigit()
 
 
-        zw_Analog_Counter = config.get('Analog_Counter', 'names').split(',')
-        self.Analog_Counter = []
-        for nm in zw_Analog_Counter:
-            nm = nm.strip()
-            cnt = []
-            cnt.append(nm)
-            x1 = int(config['Analog_Counter.'+nm]['pos_x'])
-            y1 = int(config['Analog_Counter.'+nm]['pos_y'])
-            dx = int(config['Analog_Counter.'+nm]['dx'])
-            dy = int(config['Analog_Counter.'+nm]['dy'])
-            p_neu = (x1, y1, dx, dy)
-            cnt.append(p_neu)
-            self.Analog_Counter.append(cnt)
-
-        zw_Digital_Digit = config.get('Digital_Digit', 'names').split(',')
-        self.Digital_Digit = []
-        for nm in zw_Digital_Digit:
-            nm = nm.strip()
-            cnt = []
-            cnt.append(nm)
-            x1 = int(config['Digital_Digit.'+nm]['pos_x'])
-            y1 = int(config['Digital_Digit.'+nm]['pos_y'])
-            dx = int(config['Digital_Digit.'+nm]['dx'])
-            dy = int(config['Digital_Digit.'+nm]['dy'])
-            p_neu = (x1, y1, dx, dy)
-            cnt.append(p_neu)
-            self.Digital_Digit.append(cnt)
-
-    def CheckAndLoadDefaultConfig(self):
-        defaultdir = "./config_default/"
-        targetdir = './config/'
-        if not os.path.exists(self.reference_image0):
-            zerlegt = self.reference_image0.split('/')
-            pfad = zerlegt[0]
-            for i in range(1, len(zerlegt)-1):
-                pfad = pfad + '/' + zerlegt[i]
-                if not os.path.exists(pfad):
-                    os.makedirs(pfad)
-            defaultmodel = self.reference_image0.replace(targetdir, defaultdir)
-            copyfile(defaultmodel, self.reference_image0)
-
-        if not os.path.exists(self.reference_image1):
-            zerlegt = self.reference_image1.split('/')
-            pfad = zerlegt[0]
-            for i in range(1, len(zerlegt)-1):
-                pfad = pfad + '/' + zerlegt[i]
-                if not os.path.exists(pfad):
-                    os.makedirs(pfad)
-            defaultmodel = self.reference_image1.replace(targetdir, defaultdir)
-            copyfile(defaultmodel, self.reference_image1)
-
-        if not os.path.exists(self.reference_image2):
-            zerlegt = self.reference_image2.split('/')
-            pfad = zerlegt[0]
-            for i in range(1, len(zerlegt)-1):
-                pfad = pfad + '/' + zerlegt[i]
-                if not os.path.exists(pfad):
-                    os.makedirs(pfad)
-            defaultmodel = self.reference_image2.replace(targetdir, defaultdir)
-            copyfile(defaultmodel, self.reference_image2)
+    def ReplacePathToConfig(self, inp):
+        return inp.replace(self.ConfigOriginalPath, self.ConfigReroutePath)
 
     def Cut(self, image):
         source = cv2.imread(image)
-        cv2.imwrite('./image_tmp/org.jpg', source)
+        cv2.imwrite(self.PathImageZw + 'org.jpg', source)
         target = self.RotateImage(source)
-        cv2.imwrite('./image_tmp/rot.jpg', target)
+        cv2.imwrite(self.PathImageZw + 'rot.jpg', target)
         target = self.Alignment(target)
-        cv2.imwrite('./image_tmp/alg.jpg', target)
+        cv2.imwrite(self.PathImageZw + 'alg.jpg', target)
 
         zeiger = self.cutZeiger(target)
         ziffern = self.cutZiffern(target)
@@ -119,7 +50,7 @@ class CutImage:
 #            img[y:y+h, x:x+w]
             x, y, dx, dy = zeiger[1]
             crop_img = source[y:y+dy, x:x+dx]
-            name = './image_tmp/' + zeiger[0] + '.jpg'
+            name = self.PathImageZw + zeiger[0] + '.jpg'
             cv2.imwrite(name, crop_img)
             crop_img = cv2.cvtColor(crop_img, cv2.COLOR_BGR2RGB)
             im_pil = Image.fromarray(crop_img)
@@ -132,7 +63,7 @@ class CutImage:
         for zeiger in self.Digital_Digit:
             x, y, dx, dy = zeiger[1]
             crop_img = source[y:y+dy, x:x+dx]
-            name = './image_tmp/' + zeiger[0] + '.jpg'
+            name = self.PathImageZw + zeiger[0] + '.jpg'
             cv2.imwrite(name, crop_img)
             crop_img = cv2.cvtColor(crop_img, cv2.COLOR_BGR2RGB)
             im_pil = Image.fromarray(crop_img)
@@ -143,12 +74,12 @@ class CutImage:
 
     def Alignment(self, source):
         h, w, ch = source.shape
-        p0 = self.getRefCoordinate(source, self.ref0)
-        p1 = self.getRefCoordinate(source, self.ref1)
-        p2 = self.getRefCoordinate(source, self.ref2)
+        p0 = self.getRefCoordinate(source, self.reference_image[0])
+        p1 = self.getRefCoordinate(source, self.reference_image[1])
+        p2 = self.getRefCoordinate(source, self.reference_image[2])
 
         pts1 = np.float32([p0, p1, p2])
-        pts2 = np.float32([self.reference_p0, self.reference_p1, self.reference_p2])
+        pts2 = np.float32([self.reference_pos[0], self.reference_pos[1], self.reference_pos[2]])
         M = cv2.getAffineTransform(pts1,pts2)
         target = cv2.warpAffine(source ,M, (w, h))
         return target
@@ -176,7 +107,7 @@ class CutImage:
         image = cv2.warpAffine(image, M, (w, h))
         return image
 
-    def DrawROI(self, url):
+    def DrawROIOLDOLDOLD(self, url):
         im = cv2.imread(url)
 
         d = 2
@@ -215,3 +146,40 @@ class CutImage:
             cv2.rectangle(im,(x-d,y-d),(x+w+2*d,y+h+2*d),(0,255,0),d)
             cv2.putText(im,zeiger[0],(x,y-5),0,0.4,(0,255,0))
         cv2.imwrite('./image_tmp/roi.jpg', im)
+
+    def DrawROI(self, image_in, image_out='./image_tmp/roi.jpg', draw_ref=False, draw_dig=True, draw_cou=True, ign_ref=-1, ign_dig=-1, ign_cou=-1):
+        im = cv2.imread(image_in)
+
+        d = 2
+        d_eclipse = 1
+        _colour = (255, 0, 0)
+
+        if draw_ref:
+            for i in range(3):
+                if i != ign_ref:
+                    x, y = self.reference_pos[i]
+                    h, w = self.reference_image[i].shape[:2]
+                    cv2.rectangle(im,(x-d,y-d),(x+w+2*d,y+h+2*d),_colour,d)
+                    cv2.putText(im,self.reference_name[i].replace("./config/", ""),(x,y-5),0,0.4,_colour)
+
+
+        if self.AnalogReadOutEnabled and draw_cou:
+            for i in range(len(self.Analog_Counter)):
+                if i != ign_cou:
+                    x, y, w, h = self.Analog_Counter[i][1]
+                    cv2.rectangle(im,(x-d,y-d),(x+w+2*d,y+h+2*d),(0,255,0),d)
+                    xct = int(x+w/2)+1
+                    yct = int(y+h/2)+1
+                    cv2.line(im,(xct-5,yct),(xct+5,yct),(0,255,0),1)
+                    cv2.line(im,(xct,yct-5),(xct,yct+5),(0,255,0),1)
+                    cv2.ellipse(im, (xct, yct), (int(w/2)+2*d_eclipse, int(h/2)+2*d_eclipse), 0, 0, 360, (0,255,0), d_eclipse)
+                    cv2.putText(im,self.Analog_Counter[i][0],(x,y-5),0,0.5,(0,255,0))
+
+        if draw_dig:
+            for i in range(len(self.Digital_Digit)):
+                if i != ign_dig:
+                    x, y, w, h = self.Digital_Digit[i][1]
+                    cv2.rectangle(im,(x-d,y-d),(x+w+2*d,y+h+2*d),(0,255,0),d)
+                    cv2.putText(im,self.Digital_Digit[i][0],(x,y-5),0,0.5,(0,255,0))
+
+        cv2.imwrite(image_out, im)

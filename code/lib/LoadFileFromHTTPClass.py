@@ -1,4 +1,3 @@
-import configparser
 import urllib.request
 from multiprocessing import Process, Event
 from PIL import Image
@@ -8,33 +7,12 @@ import os
 
 
 class LoadFileFromHttp:
-    def __init__(self):
-        config = configparser.ConfigParser()
-        config.read('./config/config.ini')
-
-        self.TimeoutLoadImage = 30                  # default Timeout = 30s
-        if config.has_option('Imagesource', 'TimeoutLoadImage'):
-            self.TimeoutLoadImage = int(config['Imagesource']['TimeoutLoadImage'])
-            
-        self.URLImageSource = ''
-        if config.has_option('Imagesource', 'URLImageSource'):
-            self.URLImageSource = config['Imagesource']['URLImageSource']
-
-        self.log_Image = ''
-        if config.has_option('Imagesource', 'LogImageLocation'):
-            self.log_Image = config['Imagesource']['LogImageLocation']   
-
-        self.LogOnlyFalsePictures = False
-        if config.has_option('Imagesource', 'LogOnlyFalsePictures'):
-            self.LogOnlyFalsePictures = bool(config['Imagesource']['LogOnlyFalsePictures'])
-
+    def __init__(self, readconfig):
+        (self.TimeoutLoadImage, self.URLImageSource, self.log_Image, self.LogOnlyFalsePictures) = readconfig.LoadHTTPParameter()
         self.CheckAndLoadDefaultConfig()
-        
         self.LastImageSafed = ''
 
     def CheckAndLoadDefaultConfig(self):
-        defaultdir = "./config_default/"
-        targetdir = './config/'
         if len(self.log_Image) > 0:
             if not os.path.exists(self.log_Image):
                 zerlegt = self.log_Image.split('/')
