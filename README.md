@@ -36,6 +36,8 @@ Choose for the fitting docker tag and run the server with the following paramete
 The config and the log directory can be empty at the very first start. They will be loaded with a default configuratio, that can be modified afterwards.
 
 ## Changelog - lastest version
+##### 5.0.1 (2020-02-12)
+* Update Digital CNN to v4.2.0 (new training data with pictures from iobroker users)
 ##### 5.0.0 (2019-12-28)
 * Separate environmental setup to dedicated Docker images (for Raspberry: raspi-opencv-tensorflow and for Synology (Intel w/o AVX2): synology-opencv-tensorflow)
 
