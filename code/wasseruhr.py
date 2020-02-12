@@ -64,11 +64,23 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             return
 
         if ('version' in url_parse.path) or ('ROI' in url_parse.path):
-            result = "Version 5.0.0"
+            result = "Version 5.4.1"
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
             self.wfile.write(bytes(result, 'UTF-8'))
+            return
+
+        if ('crash' in url_parse.path):
+            result = "Crash in a second"
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(bytes(result, 'UTF-8'))
+            print('Crash with division by zero!')
+            a = 1
+            b = 0
+            c = a/b
             return
 
         if ('roi' in url_parse.path) or ('ROI' in url_parse.path):
@@ -83,6 +95,14 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             result = wasserzaehler.setPreValue(value)
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(bytes(result, 'UTF-8'))
+            return
+
+        if 'wasserzaehler.json' in url_parse.path:
+            result = wasserzaehler.getZaehlerstandJSON(url, simple, usePrevalue, single)
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json')
             self.end_headers()
             self.wfile.write(bytes(result, 'UTF-8'))
             return

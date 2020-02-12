@@ -15,8 +15,8 @@ This is available for an Intel based System (e.g. Synology Docker) as well as an
 | -------------- | ------------- | ------------- |
 | rolling | Experimental version for amd64-systems (e.g. Intel processors) | newest features, not fully tested |
 | raspi-rolling | Experimental version for armv7-systems (Raspberry PI3 and higher) | newest features, not fully tested  |
-| latest | Latest stable version for amd64-systems (e.g. Intel processors) | Currently identical to v5.0.0 (2019-12-28) |
-| raspi-latest | Latest stable version for armv7-systems (Raspberry PI3 and higher) | Currently identical to v5.0.0 (2019-12-28) |
+| latest | Latest stable version for amd64-systems (e.g. Intel processors) | Currently identical to v5.3.0 (2020-01-12) |
+| raspi-latest | Latest stable version for armv7-systems (Raspberry PI3 and higher) | Currently identical to v5.3.0 (2020-01-12) |
 | v4.x | Update to Tensorflow 2.0, fully automated build | Details see below |
 | v3.x | Tensorflow 1.4, manual build | Details see below  |
 
@@ -36,8 +36,15 @@ Choose for the fitting docker tag and run the server with the following paramete
 The config and the log directory can be empty at the very first start. They will be loaded with a default configuratio, that can be modified afterwards.
 
 ## Changelog - lastest version
-##### 5.0.1 (2020-02-12)
-* Update Digital CNN to v4.2.0 (new training data with pictures from iobroker users)
+##### 5.4.9 (2019-01-27)
+* Extensdion to json output: ../wasserzaehler.json
+##### 5.3.0 (2019-01-08)
+* Integration of storage of prevalue in file to reload on startup
+* Correction of drawing analog counter ROIs even if they are disabled
+##### 5.2.0 (2019-01-03)
+* Raspberry Version: Remove autorestart (not working) - instead: use cron job for regular restart to handle tensorflow memory leak [Setting up cron job](https://github.com/jomjol/water-meter-system-complete/blob/raspi-rolling/Raspi-Cron-Job.md)
+##### 5.1.0 (2019-12-28)
+* Raspberry Version: Autorestart on Python Crash of wasserzaehler.py
 ##### 5.0.0 (2019-12-28)
 * Separate environmental setup to dedicated Docker images (for Raspberry: raspi-opencv-tensorflow and for Synology (Intel w/o AVX2): synology-opencv-tensorflow)
 

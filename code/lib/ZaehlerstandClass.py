@@ -6,6 +6,9 @@ import lib.LoadFileFromHTTPClass
 import math
 import os
 from shutil import copyfile
+import time
+from datetime import datetime
+import json
 
 class Zaehlerstand:
     def __init__(self):
@@ -54,16 +57,27 @@ class Zaehlerstand:
         self.LastVorkomma = ''
         self.LastNachkomma = ''
 
+        ReadPreValueFromFileMaxAge = 0
+        if config.has_option('ConsistencyCheck', 'ReadPreValueFromFileMaxAge'):
+            ReadPreValueFromFileMaxAge = int(config['ConsistencyCheck']['ReadPreValueFromFileMaxAge'])
+        if config.has_option('ConsistencyCheck', 'ReadPreValueFromFileAtStartup'):
+            if config['ConsistencyCheck']['ReadPreValueFromFileAtStartup']:
+                self.prevalueLoadFromFile(ReadPreValueFromFileMaxAge)
+
     def CheckAndLoadDefaultConfig(self):
         defaultdir = "./config_default/"
         targetdir = './config/'
         if not os.path.exists('./config/config.ini'):
             copyfile(defaultdir + 'config.ini', targetdir + 'config.ini')
+        if not os.path.exists('./config/prevalue.ini'):
+            copyfile(defaultdir + 'prevalue.ini', targetdir + 'prevalue.ini')
 
     def setPreValue(self, setValue):
         zerlegt = setValue.split('.')
         vorkomma = zerlegt[0][0:len(self.CutImage.Digital_Digit)]
         self.LastVorkomma = vorkomma.zfill(len(self.CutImage.Digital_Digit))
+
+        logtime = time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())
 
         result='N'
         if self.AnalogReadOutEnabled:
@@ -71,11 +85,46 @@ class Zaehlerstand:
             while len(nachkomma) < len(self.CutImage.Analog_Counter):
                 nachkomma = nachkomma + '0'
             self.LastNachkomma = nachkomma
-            result = 'Last value set to:  ' + self.LastVorkomma + '.' + self.LastNachkomma
+            result = self.LastVorkomma + '.' + self.LastNachkomma
         else:
-            result = 'Last value set to:  ' + self.LastVorkomma
+            result = self.LastVorkomma
+
+        self.prevalueStoreToFile(logtime)
         
+        result = 'Last value set to: ' + result
         return result
+
+    def prevalueStoreToFile(self, logtime):
+        config = configparser.ConfigParser()
+        config.read('./config/prevalue.ini')
+        config['PreValue']['LastVorkomma'] = self.LastVorkomma
+        if self.AnalogReadOutEnabled:
+            config['PreValue']['LastNachkomma'] = self.LastNachkomma
+        config['PreValue']['Time'] = logtime
+        with open('./config/prevalue.ini', 'w') as cfg:
+            config.write(cfg)
+
+    def prevalueLoadFromFile(self, ReadPreValueFromFileMaxAge):
+        config = configparser.ConfigParser()
+        config.read('./config/prevalue.ini')
+        logtime = config['PreValue']['Time']
+        safetime = time.strptime(logtime, '%Y-%m-%d_%H-%M-%S')
+        nowtime = time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())
+        
+        fmt = '%Y-%m-%d_%H-%M-%S'
+#        d1 = datetime.strptime(nowtime, fmt)
+        d1 = datetime.now()
+        d2 = datetime.strptime(logtime, fmt)
+        unterschied = (d1-d2).days * 24 * 60
+        
+        if unterschied <= ReadPreValueFromFileMaxAge:
+            self.LastVorkomma = config['PreValue']['LastVorkomma']
+            self.LastNachkomma = config['PreValue']['LastNachkomma']
+            zw = 'Prevalue loaded from file: ' + self.LastVorkomma + '.' + self.LastNachkomma
+            print(zw)
+        else:
+            zw = 'Prevalue not loaded from file - value too old (' + str(unterschied) + ' minutes).'
+            print(zw)
 
     def getROI(self, url):
         txt, logtime = self.LoadFileFromHTTP.LoadImageFromURL(url, './image_tmp/original.jpg')
@@ -137,6 +186,94 @@ class Zaehlerstand:
             print('Get Zaehlerstand done')
         return txt
 
+    
+    def getZaehlerstandJSON(self, url, simple = True, UsePreValue = False, single = False, ignoreConsistencyCheck = False):
+        #txt = ""
+        #logtime="test"
+        Value = ""
+        Digit = ""
+        AnalogCounter = ""
+        Error = ""        
+        txt, logtime = self.LoadFileFromHTTP.LoadImageFromURL(url, './image_tmp/original.jpg')
+
+        if self.AnalogReadOutEnabled:
+            zw = self.LastVorkomma.lstrip("0") + "." + self.LastNachkomma
+        else:
+            zw = self.LastVorkomma.lstrip("0")
+            
+        preval = {
+            "Value": zw,
+            "DigitalDigits": self.LastVorkomma,
+            "AnalogCounter": self.LastNachkomma,
+            }
+
+        if len(txt) == 0:
+            if self.AnalogReadOutEnabled:
+                print('Start CutImage, AnalogReadout, DigitalReadout')
+            else:
+                print('Start CutImage, DigitalReadout')            
+            resultcut = self.CutImage.Cut('./image_tmp/original.jpg')
+            self.CutImage.DrawROI('./image_tmp/alg.jpg')  # update ROI
+
+            #resultanalog = [0, 0, 0, 0]
+            #resultdigital = [1, 2, 3, 4, 5]
+            if self.AnalogReadOutEnabled:
+                resultanalog = self.readAnalogNeedle.Readout(resultcut[0], logtime)
+            resultdigital = self.readDigitalDigit.Readout(resultcut[1], logtime)
+            
+            self.akt_nachkomma = 0
+            if self.AnalogReadOutEnabled:
+                self.akt_nachkomma = self.AnalogReadoutToValue(resultanalog)
+            self.akt_vorkomma = self.DigitalReadoutToValue(resultdigital, UsePreValue, self.LastNachkomma, self.akt_nachkomma)
+            self.LoadFileFromHTTP.PostProcessLogImageProcedure(True)
+
+            print('Start Making Zaehlerstand')
+            (error, errortxt) = self.checkConsistency(ignoreConsistencyCheck)
+            self.UpdateLastValues(error)
+
+            (Value, AnalogCounter, Digit, Error) = self.MakeReturnValueJSON(error, errortxt, single)
+
+            result = {
+                "Value": Value,
+                "DigitalDigits": Digit,
+                "AnalogCounter": AnalogCounter,
+                "Error": Error,
+                "Prevalue": preval
+                }
+        else:
+            result = {
+                "Value": Value,
+                "DigitalDigits": Digit,
+                "AnalogCounter": AnalogCounter,
+                "Error": txt,
+                "Prevalue": preval
+                }
+
+        txt = json.dumps(result)
+        return txt
+
+    def MakeReturnValueJSON(self, error, errortxt, single):
+        Value = ""
+        AnalogCounter = ""
+        Digit = ""
+        Errortxt = errortxt
+        if (error):
+            if self.ErrorReturn.find('Value') > -1:
+                Digit = str(self.akt_vorkomma)
+                Value = str(self.akt_vorkomma.lstrip("0"))
+                if self.AnalogReadOutEnabled:
+                    Value = Value + '.' + str(self.akt_nachkomma)
+                    AnalogCounter = str(self.akt_nachkomma)
+        else:
+            Digit = str(self.akt_vorkomma.lstrip("0"))
+            Value = str(self.akt_vorkomma.lstrip("0"))
+            if self.AnalogReadOutEnabled:
+                Value = Value + '.' + str(self.akt_nachkomma)
+                AnalogCounter = str(self.akt_nachkomma)
+        return (Value, AnalogCounter, Digit, Errortxt)
+
+
+
     def MakeReturnValue(self, error, errortxt, single):
         output = ''
         if (error):
@@ -175,6 +312,9 @@ class Zaehlerstand:
         else:
             self.LastNachkomma = self.akt_nachkomma
             self.LastVorkomma = self.akt_vorkomma
+
+        logtime = time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())
+        self.prevalueStoreToFile(logtime)
 
     def checkConsistency(self, ignoreConsistencyCheck):
         error = False
