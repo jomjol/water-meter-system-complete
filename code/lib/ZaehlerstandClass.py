@@ -325,12 +325,12 @@ class Zaehlerstand:
             delta = akt_zaehlerstand - old_zaehlerstand
             if not(self.AllowNegativeRates) and (delta < 0):
                 error = True
-                errortxt = "ErrorNegativeRate"
+                errortxt = "Error - NegativeRate"
             if abs(delta) > self.MaxRateValue:
                 if error:
-                    errortxt = "ErrorRateTooHigh (" + str(delta) + ")" + errortxt
+                    errortxt = "Error - RateTooHigh ({:.4f})" + errortxt.format(delta)
                 else:
-                    errortxt = "ErrorRateTooHigh (" + str(delta) + ")"
+                    errortxt = "Error - RateTooHigh ({:.4f})".format(delta)
                 error = True
             if self.ErrorReturn.find('ErrorMessage') == -1:
                 errortxt = ''

@@ -36,6 +36,9 @@ Choose for the fitting docker tag and run the server with the following paramete
 The config and the log directory can be empty at the very first start. They will be loaded with a default configuratio, that can be modified afterwards.
 
 ## Changelog - lastest version
+##### 5.5.2 (2020-02-23)
+* Modification of Errortext in case RateToHigh, NegativeRate (Blank after "Error", e.g. "ErrorRateToHigh" --> "Error - RateToHigh")
+* Change MaxRateValue from 0.1 to 0.2 in Default Config.ini
 ##### 5.5.1 (2020-02-15)
 * Update CNN-Digital to v5.0.0 (improved training data from iobroker users)
 * Update CNN-Analog to v5.0.0 (improved training data from iobroker users)
