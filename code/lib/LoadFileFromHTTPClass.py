@@ -64,9 +64,9 @@ class LoadFileFromHttp:
             if self.VerifyImage(target) == True:
                 result = ''
             else:
-                result = 'Error - Imagefile is corrupted'
+                result = 'Error - Imagefile is corrupted - Source: ' + str(url) 
         else:
-            result = 'Error - Problem during Imageload (file not exists or timeout)'
+            result = 'Error - Problem during HTTP-request - URL: ' + str(url) 
         return (result, logtime)
 
     def PostProcessLogImageProcedure(self, everythingsuccessfull):
