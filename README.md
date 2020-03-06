@@ -36,10 +36,20 @@ Choose for the fitting docker tag and run the server with the following paramete
 The config and the log directory can be empty at the very first start. They will be loaded with a default configuratio, that can be modified afterwards.
 
 ## Changelog - lastest version
-##### 5.3.0 (2019-01-08)
+##### 5.5.2 (2020-02-23)
+* Modification of Errortext in case RateToHigh, NegativeRate (Blank after "Error", e.g. "ErrorRateToHigh" --> "Error - RateToHigh")
+* Change MaxRateValue from 0.1 to 0.2 in Default Config.ini
+##### 5.5.1 (2020-02-15)
+* Update CNN-Digital to v5.0.0 (improved training data from iobroker users)
+* Update CNN-Analog to v5.0.0 (improved training data from iobroker users)
+##### 5.5.0 (2020-02-12)
+* Update CNN-Digital to v4.2.0 (improved training data from iobroker users)
+##### 5.4.9 (2020-01-27)
+* Extensdion to json output: ../wasserzaehler.json
+##### 5.3.0 (2020-01-08)
 * Integration of storage of prevalue in file to reload on startup
 * Correction of drawing analog counter ROIs even if they are disabled
-##### 5.2.0 (2019-01-03)
+##### 5.2.0 (2020-01-03)
 * Raspberry Version: Remove autorestart (not working) - instead: use cron job for regular restart to handle tensorflow memory leak [Setting up cron job](https://github.com/jomjol/water-meter-system-complete/blob/raspi-rolling/Raspi-Cron-Job.md)
 ##### 5.1.0 (2019-12-28)
 * Raspberry Version: Autorestart on Python Crash of wasserzaehler.py
