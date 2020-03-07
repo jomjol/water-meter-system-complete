@@ -36,6 +36,9 @@ Choose for the fitting docker tag and run the server with the following paramete
 The config and the log directory can be empty at the very first start. They will be loaded with a default configuratio, that can be modified afterwards.
 
 ## Changelog - lastest version
+##### 5.6.0 (2020-03-07)
+* Internal update of config.ini handling (started)
+* Update roi.html
 ##### 5.5.2 (2020-02-23)
 * Modification of Errortext in case RateToHigh, NegativeRate (Blank after "Error", e.g. "ErrorRateToHigh" --> "Error - RateToHigh")
 * Change MaxRateValue from 0.1 to 0.2 in Default Config.ini
