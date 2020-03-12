@@ -24,7 +24,7 @@ This is available for an Intel based System (e.g. Synology Docker) as well as an
 ## Running docker
 Choose for the fitting docker tag and run the server with the following parameters:
 
-```sudo docker run -p 3000:3000 --mount type=bind,source=/PATH_TO_LOCAL_CONFIG, target=/config --mount type=bind,source=/PATH_TO_LOCAL_LOG,target=/log jomjol/wasserzaehler:DOCKER_TAG```
+```sudo docker run -p 3000:3000 --mount type=bind,source=/PATH_TO_LOCAL_CONFIG,target=/config --mount type=bind,source=/PATH_TO_LOCAL_LOG,target=/log jomjol/wasserzaehler:DOCKER_TAG```
 
 #### Paramters
 | Parameter | 	Meaning  | Example |
@@ -36,6 +36,8 @@ Choose for the fitting docker tag and run the server with the following paramete
 The config and the log directory can be empty at the very first start. They will be loaded with a default configuratio, that can be modified afterwards.
 
 ## Changelog - lastest version
+##### 5.6.1 (2020-03-12)
+* Correct error in docker commmand (remove space character in bind)
 ##### 5.6.0 (2020-03-07)
 * Internal update of config.ini handling (started)
 * Update roi.html
