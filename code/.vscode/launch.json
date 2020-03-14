@@ -8,7 +8,7 @@
             "name": "Python: Aktuelle Datei",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/wasseruhr.py",
+            "program": "${file}",
             "console": "integratedTerminal"
         }
     ]
