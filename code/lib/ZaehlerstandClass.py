@@ -3,15 +3,20 @@ import lib.ReadAnalogNeedleClass
 import lib.CutImageClass
 import lib.ReadDigitalDigitClass
 import lib.LoadFileFromHTTPClass
+import lib.ReadConfig
 import math
 import os
 from shutil import copyfile
 import time
 from datetime import datetime
 import json
+from pathlib import Path
 
 class Zaehlerstand:
     def __init__(self):
+        basedir = Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        conf_path = Path(os.path.join(basedir, 'config'))
+        self.readConfig = lib.ReadConfig.ReadConfig(conf_path)
         self.CheckAndLoadDefaultConfig()
 
         config = configparser.ConfigParser()
@@ -33,7 +38,7 @@ class Zaehlerstand:
 
         self.readDigitalDigit = lib.ReadDigitalDigitClass.ReadDigitalDigit()
         print('Digital Model Init Done')
-        self.CutImage = lib.CutImageClass.CutImage()
+        self.CutImage = lib.CutImageClass.CutImage(self.readConfig)
         print('Digital Model Init Done')
         self.LoadFileFromHTTP = lib.LoadFileFromHTTPClass.LoadFileFromHttp()
 
