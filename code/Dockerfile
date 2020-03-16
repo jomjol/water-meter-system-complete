@@ -1,4 +1,4 @@
-FROM jomjol/synology-opencv-tensorflow
+FROM jomjol/synology-opencv-tensorflow:tf21-cp36
 
 WORKDIR /
 
