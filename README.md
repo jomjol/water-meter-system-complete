@@ -15,8 +15,8 @@ This is available for an Intel based System (e.g. Synology Docker) as well as an
 | -------------- | ------------- | ------------- |
 | rolling | Experimental version for amd64-systems (e.g. Intel processors) | newest features, not fully tested |
 | raspi-rolling | Experimental version for armv7-systems (Raspberry PI3 and higher) | newest features, not fully tested  |
-| latest | Latest stable version for amd64-systems (e.g. Intel processors) | Currently identical to 5.6.1 (2020-03-12) |
-| raspi-latest | Latest stable version for armv7-systems (Raspberry PI3 and higher) | Currently identical to 5.6.1 (2020-03-12) |
+| latest | Latest stable version for amd64-systems (e.g. Intel processors) | Currently identical to 6.0.0 (2020-03-16) |
+| raspi-latest | Latest stable version for armv7-systems (Raspberry PI3 and higher) | Currently identical to 6.0.0 (2020-03-16) |
 | v5.x | Persistant prevalue, modified docker structure | Details see below |
 | v4.x | Update to Tensorflow 2.0, fully automated build | Details see below |
 | v3.x | Tensorflow 1.4, manual build | Details see below  |
