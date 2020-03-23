@@ -3,7 +3,7 @@ import urllib.request
 from multiprocessing import Process, Event
 from PIL import Image
 from shutil import copyfile
-import time 
+import time
 import os
 
 
@@ -15,21 +15,25 @@ class LoadFileFromHttp:
         self.TimeoutLoadImage = 30                  # default Timeout = 30s
         if config.has_option('Imagesource', 'TimeoutLoadImage'):
             self.TimeoutLoadImage = int(config['Imagesource']['TimeoutLoadImage'])
-            
+
         self.URLImageSource = ''
         if config.has_option('Imagesource', 'URLImageSource'):
             self.URLImageSource = config['Imagesource']['URLImageSource']
 
+        self.MinImageSize = 10000
+        if config.has_option('Imagesource', 'MinImageSize'):
+            self.MinImageSize = int(config['Imagesource']['MinImageSize'])
+
         self.log_Image = ''
         if config.has_option('Imagesource', 'LogImageLocation'):
-            self.log_Image = config['Imagesource']['LogImageLocation']   
+            self.log_Image = config['Imagesource']['LogImageLocation']
 
         self.LogOnlyFalsePictures = False
         if config.has_option('Imagesource', 'LogOnlyFalsePictures'):
             self.LogOnlyFalsePictures = bool(config['Imagesource']['LogOnlyFalsePictures'])
 
         self.CheckAndLoadDefaultConfig()
-        
+
         self.LastImageSafed = ''
 
     def CheckAndLoadDefaultConfig(self):
@@ -63,17 +67,21 @@ class LoadFileFromHttp:
         if event.is_set():
             self.saveLogImage(target, logtime)
             if self.VerifyImage(target) == True:
-                result = ''
+                image_size = os.stat(target).st_size
+                if image_size > self.MinImageSize:
+                    result = ''
+                else:
+                    result = 'Error - Imagefile too small. Size ' + str(image_size) + ', min size is ' + str(self.MinImageSize)+ '. Source: ' + str(url)
             else:
-                result = 'Error - Imagefile is corrupted - Source: ' + str(url) 
+                result = 'Error - Imagefile is corrupted - Source: ' + str(url)
         else:
-            result = 'Error - Problem during HTTP-request - URL: ' + str(url) 
+            result = 'Error - Problem during HTTP-request - URL: ' + str(url)
         return (result, logtime)
 
     def PostProcessLogImageProcedure(self, everythingsuccessfull):
         if (len(self.log_Image) > 0) and self.LogOnlyFalsePictures and (len(self.LastImageSafed) > 0) and everythingsuccessfull:
             os.remove(self.LastImageSafed)
-            self.LastImageSafed = '' 
+            self.LastImageSafed = ''
 
     def VerifyImage(self, img_file):
         try:
