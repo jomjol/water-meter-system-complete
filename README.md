@@ -36,6 +36,8 @@ Choose for the fitting docker tag and run the server with the following paramete
 The config and the log directory can be empty at the very first start. They will be loaded with a default configuratio, that can be modified afterwards.
 
 ## Changelog - lastest version
+##### 5.6.2 (2020-03-23)
+* MinImageSize configuration parameters added. This will detect damaged images.
 ##### 5.6.1 (2020-03-12)
 * Correct error in docker commmand (remove space character in bind)
 ##### 5.6.0 (2020-03-07)
