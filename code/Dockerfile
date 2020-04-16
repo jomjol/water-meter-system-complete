@@ -1,4 +1,4 @@
-FROM jomjol/synology-opencv-tensorflow
+FROM python:3.7
 
 WORKDIR /
 
