@@ -1,12 +1,11 @@
-FROM jomjol/raspberry-opencv-tensorflow
+FROM jomjol/raspberry-opencv-tensorflow:tf21
 
 RUN [ "cross-build-start" ]
 
 WORKDIR /
 
-RUN wget -qO- https://getpm2.com/install.sh | bash
-
 COPY . ./
+
 RUN pip3 install --no-cache-dir -r requirements_raspi.txt
 
 RUN [ "cross-build-end" ]

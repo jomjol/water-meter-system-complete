@@ -15,8 +15,9 @@ This is available for an Intel based System (e.g. Synology Docker) as well as an
 | -------------- | ------------- | ------------- |
 | rolling | Experimental version for amd64-systems (e.g. Intel processors) | newest features, not fully tested |
 | raspi-rolling | Experimental version for armv7-systems (Raspberry PI3 and higher) | newest features, not fully tested  |
-| latest | Latest stable version for amd64-systems (e.g. Intel processors) | Currently identical to 5.6.1 (2020-03-12) |
-| raspi-latest | Latest stable version for armv7-systems (Raspberry PI3 and higher) | Currently identical to 5.6.1 (2020-03-12) |
+| latest | Latest stable version for amd64-systems (e.g. Intel processors) | Currently identical to 6.0.0 (2020-03-16) |
+| raspi-latest | Latest stable version for armv7-systems (Raspberry PI3 and higher) | Currently identical to 6.0.0 (2020-03-16) |
+| v5.x | Persistant prevalue, modified docker structure | Details see below |
 | v4.x | Update to Tensorflow 2.0, fully automated build | Details see below |
 | v3.x | Tensorflow 1.4, manual build | Details see below  |
 
@@ -36,8 +37,11 @@ Choose for the fitting docker tag and run the server with the following paramete
 The config and the log directory can be empty at the very first start. They will be loaded with a default configuratio, that can be modified afterwards.
 
 ## Changelog - lastest version
-##### 5.6.2 (2020-03-23)
-* MinImageSize configuration parameters added. This will detect damaged images.
+
+##### 6.1.0 (2020-04-17)
+* MinImageSize configuration parameters added. This will detect damaged images. (Extension from Zwer2k)
+##### 6.0.0 (2020-03-16)
+* Update Tensorflow to v2.1 - downgrade Python to v3.6 (to enable compiling for Synology (w/o AVX2))
 ##### 5.6.1 (2020-03-12)
 * Correct error in docker commmand (remove space character in bind)
 ##### 5.6.0 (2020-03-07)
@@ -62,6 +66,7 @@ The config and the log directory can be empty at the very first start. They will
 * Raspberry Version: Autorestart on Python Crash of wasserzaehler.py
 ##### 5.0.0 (2019-12-28)
 * Separate environmental setup to dedicated Docker images (for Raspberry: raspi-opencv-tensorflow and for Synology (Intel w/o AVX2): synology-opencv-tensorflow)
+
 
 ### [Full Changelog](https://github.com/jomjol/water-meter-system-complete/blob/raspi-rolling/Changelog.md)
 
