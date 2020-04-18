@@ -1,6 +1,7 @@
 # Remove if certain files are committed on purpose
 .idea/
 .vscode/
+.code-workspace
 
 
 # Created by https://www.gitignore.io/api/python,pycharm,visualstudio
