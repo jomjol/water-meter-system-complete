@@ -5,6 +5,7 @@ import os
 from shutil import copyfile
 from PIL import Image
 from pathlib import Path
+import threading
 
 class CutImage():
     def __init__(self, readconfig, zwpath='./image_tmp/'):
@@ -24,6 +25,8 @@ class CutImage():
 
         (self.AnalogReadOutEnabled, self.Analog_Counter) = readconfig.CutGetAnalogCounter()
         (self.Digital_Digit) = readconfig.CutGetDigitalDigit()
+        self.FastMode = readconfig.Cut_FastMode
+        self.M = None
 
 
     def ReplacePathToConfig(self, inp):
@@ -79,6 +82,15 @@ class CutImage():
             result.append(singleresult)
         return result
 
+    def Alignment(self, source):
+        h, w, ch = source.shape
+        if (self.M is None) or (self.FastMode == False):
+            self.CalculateAffineTransform(source)
+        else:
+            CalcAffTransOffline = self.CalcAffTransOfflineClass(self)
+            CalcAffTransOffline.start()            
+        target = cv2.warpAffine(source, self.M, (w, h))
+        return target
 
     def Alignment(self, source):
         h, w, ch = source.shape
@@ -91,6 +103,40 @@ class CutImage():
         M = cv2.getAffineTransform(pts1,pts2)
         target = cv2.warpAffine(source ,M, (w, h))
         return target
+
+    def CalculateAffineTransform(self, source):
+        print("Cut CalcAffineTransformation")
+        h, w, ch = source.shape
+        if debug: 
+            print(self.gettimestring() + " Align 01a")        
+        p0 = self.getRefCoordinate(source, self.reference_image[0])
+        if debug: 
+            print(self.gettimestring() + " Align 01b")  
+        p1 = self.getRefCoordinate(source, self.reference_image[1])
+        if debug: 
+            print(self.gettimestring() + " Align 01c")  
+        p2 = self.getRefCoordinate(source, self.reference_image[2])
+        if debug: 
+            print(self.gettimestring() + " Align 02")  
+
+        pts1 = np.float32([p0, p1, p2])
+        pts2 = np.float32([self.reference_pos[0], self.reference_pos[1], self.reference_pos[2]])
+        self.M = cv2.getAffineTransform(pts1,pts2)
+
+
+    class CalcAffTransOfflineClass(threading.Thread):
+        def __init__(self, _master):
+            threading.Thread.__init__(self)
+            self.master = _master
+
+        def run(self):
+            self.master.CalculateAffineTransform(self.master.targetrot)
+
+    def CutAfter(self):
+        print("Cut After")
+        if self.FastMode:
+            CalcAffTransOffline = self.CalcAffTransOfflineClass(self)
+            CalcAffTransOffline.start()        
 
     def getRefCoordinate(self, image, template):
 #        method = cv2.TM_SQDIFF                     #2

@@ -124,6 +124,14 @@ class ReadConfig:
 
 
         ################## ImageCut Parameters ###############################
+        self.Cut_FastMode = False
+        if config.has_option('alignment', 'fastmode'):
+            self.Cut_FastMode = config['alignment']['fastmode']
+            if self.Cut_FastMode.upper() == 'TRUE':
+                self.Cut_FastMode = True 
+            else:
+                self.Cut_FastMode = False    
+
         self.Cut_rotateAngle = float(config['alignment']['initial_rotation_angle'])
         print(self.Cut_rotateAngle)
 
