@@ -38,6 +38,8 @@ The config and the log directory can be empty at the very first start. They will
 
 ## Changelog - lastest version
 
+##### 6.1.1 (2020-04-23)
+* Update CNN-Files to v6.0.0, v6.0.1
 ##### 6.1.0 (2020-04-17)
 * MinImageSize configuration parameters added. This will detect damaged images. (Extension from Zwer2k)
 ##### 6.0.0 (2020-03-16)
