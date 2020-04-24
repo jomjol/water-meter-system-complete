@@ -106,6 +106,9 @@ class UseClassificationCNN:
         output_data = self.interpreter.get_tensor(self.output_details[0]['index'])
         result = np.argmax(output_data)
 
+        if result == 10:
+            result = "NaN"
+
 
         if debug: 
             print(self.gettimestring() + " Validity 06")
