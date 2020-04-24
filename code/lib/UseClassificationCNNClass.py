@@ -99,12 +99,12 @@ class UseClassificationCNN:
         if debug: 
             print(self.gettimestring() + " Validity 05")
 
-        if self.isTFLite:
-            input_data = img
-            self.interpreter.set_tensor(self.input_details[0]['index'], input_data)
-            self.interpreter.invoke()
-            output_data = self.interpreter.get_tensor(self.output_details[0]['index'])
-            result = np.argmax(output_data)
+
+        input_data = img
+        self.interpreter.set_tensor(self.input_details[0]['index'], input_data)
+        self.interpreter.invoke()
+        output_data = self.interpreter.get_tensor(self.output_details[0]['index'])
+        result = np.argmax(output_data)
 
 
         if debug: 
