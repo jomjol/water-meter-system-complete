@@ -120,6 +120,8 @@ class UseClassificationCNN:
     def saveLogImage(self, image, value, logtime):
         if (len(self.LogNames) > 0) and (not image[0] in self.LogNames):
             return
+        if value == 'NaN':
+            value = 10
         speichername = image[0] + '_' + logtime + '.jpg'
         speichername = self.log_Image + '/' + str(value) + '/' + speichername
         image[1].save(speichername, "JPEG")

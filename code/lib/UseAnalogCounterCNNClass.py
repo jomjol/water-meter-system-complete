@@ -33,22 +33,12 @@ class UseAnalogCounterCNN:
 
         self.CheckAndLoadDefaultConfig()
 
-        if in_LogImageLocation:
-            if (os.path.exists(self.log_Image)):
-                for i in range(in_numberclasses):
-                    pfad = self.log_Image + '/' + str(i)
-                    if not os.path.exists(pfad):
-                        os.makedirs(pfad)
-
+        if self.log_Image:
             if in_LogNames:
                 zw_LogNames = in_LogNames.split(',')
                 self.LogNames = []
                 for nm in zw_LogNames:
                       self.LogNames.append(nm.strip())
-            else:
-                self.LogNames = ''
-        else:
-            self.log_Image = ''
 
         filename, file_extension = os.path.splitext(self.model_file)
         if file_extension != ".tflite":
@@ -127,9 +117,9 @@ class UseAnalogCounterCNN:
     def saveLogImage(self, image, value, logtime):
         if (len(self.LogNames) > 0) and (not image[0] in self.LogNames):
             return
-        speichername = image[0] + '_' + logtime + '.jpg'
-        speichername = self.log_Image + '/' + str(value) + '/' + speichername
-        image[1].save(speichername, "JPEG")
+        speichername = "{:.1f}".format(value) + '_' +  image[0] + '_' + logtime + '.jpg'
+        speichername = self.log_Image + '/' + speichername
+        image[1].save(speichername, "JPEG")        
 
     def gettimestring(self):
         curr_time = datetime.now()
