@@ -28,6 +28,8 @@ class UseAnalogCounterCNN:
         self.LogNames = ''
         self.dx = in_dx
         self.dy = in_dy
+        self.GlobalError = False
+        self.GlobalErrorText = ""
 
         self.model_file = in_Modelfile
 
@@ -43,7 +45,9 @@ class UseAnalogCounterCNN:
         filename, file_extension = os.path.splitext(self.model_file)
         if file_extension != ".tflite":
             print("ERROR - only TFLite-Model (*.tflite) are support since version 7.0.0 and higher")
-            quit()
+            self.GlobalError = True
+            self.GlobalErrorText = "AnalogCNN-File for Analog Neural Network is not tflite-Format. If you want to use h5-files you need to downgrade to v6.1.1. This is not recommended."
+            return
 
         self.interpreter = tflite.Interpreter(model_path=self.model_file)
         self.interpreter.allocate_tensors()

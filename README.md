@@ -15,12 +15,11 @@ This is available for an Intel based System (e.g. Synology Docker) as well as an
 | -------------- | ------------- | ------------- |
 | rolling | Experimental version for amd64-systems (e.g. Intel processors) | newest features, not fully tested |
 | raspi-rolling | Experimental version for armv7-systems (Raspberry PI3 and higher) | newest features, not fully tested  |
-| latest | Latest stable version for amd64-systems (e.g. Intel processors) | Currently identical to 6.0.0 (2020-03-16) |
-| raspi-latest | Latest stable version for armv7-systems (Raspberry PI3 and higher) | Currently identical to 6.0.0 (2020-03-16) |
+| latest | Latest stable version for amd64-systems (e.g. Intel processors) | Currently identical to 6.1.1 (2020-04-23) |
+| raspi-latest | Latest stable version for armv7-systems (Raspberry PI3 and higher) | Currently identical to 6.1.1 (2020-04-23) |
 | v5.x | Persistant prevalue, modified docker structure | Details see below |
 | v4.x | Update to Tensorflow 2.0, fully automated build | Details see below |
 | v3.x | Tensorflow 1.4, manual build | Details see below  |
-
 
 ## Running docker
 Choose for the fitting docker tag and run the server with the following parameters:
@@ -38,42 +37,17 @@ The config and the log directory can be empty at the very first start. They will
 
 ## Changelog - lastest version
 
-
+##### 7.1.0 (2020-05-14)
+* ErrorMessage in case of wrong CNN-files (old h5, instead of supported tflite)
+* Neural Network Files updated to newest version - trained with new user images (v6.1.0)
 ##### 7.0.1 (2020-04-27)
 * Error-Correction: saving jpg-logs 
 ##### 7.0.0 (2020-02-20) **ATTENTION: cnn-files not downward compatible **
 * Major Update: use tflite runtime instead of full Tensorflow - **ATTENTION: cnn-files not downward compatible **
 * Internal change of CNN-Usage library structure
 ##### 6.1.1 (2020-04-23)
-* Update CNN-Files to v6.0.0, v6.0.1
-##### 6.1.0 (2020-04-17)
-* MinImageSize configuration parameters added. This will detect damaged images. (Extension from Zwer2k)
-##### 6.0.0 (2020-03-16)
-* Update Tensorflow to v2.1 - downgrade Python to v3.6 (to enable compiling for Synology (w/o AVX2))
-##### 5.6.1 (2020-03-12)
-* Correct error in docker commmand (remove space character in bind)
-##### 5.6.0 (2020-03-07)
-* Internal update of config.ini handling (started)
-* Update roi.html
-##### 5.5.2 (2020-02-23)
-* Modification of Errortext in case RateToHigh, NegativeRate (Blank after "Error", e.g. "ErrorRateToHigh" --> "Error - RateToHigh")
-* Change MaxRateValue from 0.1 to 0.2 in Default Config.ini
-##### 5.5.1 (2020-02-15)
-* Update CNN-Digital to v5.0.0 (improved training data from iobroker users)
-* Update CNN-Analog to v5.0.0 (improved training data from iobroker users)
-##### 5.5.0 (2020-02-12)
-* Update CNN-Digital to v4.2.0 (improved training data from iobroker users)
-##### 5.4.9 (2020-01-27)
-* Extensdion to json output: ../wasserzaehler.json
-##### 5.3.0 (2020-01-08)
-* Integration of storage of prevalue in file to reload on startup
-* Correction of drawing analog counter ROIs even if they are disabled
-##### 5.2.0 (2020-01-03)
-* Raspberry Version: Remove autorestart (not working) - instead: use cron job for regular restart to handle tensorflow memory leak [Setting up cron job](https://github.com/jomjol/water-meter-system-complete/blob/raspi-rolling/Raspi-Cron-Job.md)
-##### 5.1.0 (2019-12-28)
-* Raspberry Version: Autorestart on Python Crash of wasserzaehler.py
-##### 5.0.0 (2019-12-28)
-* Separate environmental setup to dedicated Docker images (for Raspberry: raspi-opencv-tensorflow and for Synology (Intel w/o AVX2): synology-opencv-tensorflow)
+* Last Version with h5-File-Support
+
 
 
 ### [Full Changelog](https://github.com/jomjol/water-meter-system-complete/blob/raspi-rolling/Changelog.md)

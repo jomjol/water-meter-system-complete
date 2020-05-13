@@ -25,6 +25,15 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             gc.collect()
             wasserzaehler = lib.ZaehlerstandClass.Zaehlerstand()
             return
+
+        GlobalError = wasserzaehler.CheckError()
+        if GlobalError is not None:
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(bytes(GlobalError, 'UTF-8'))
+
+            return
            
 
         if "/image_tmp/" in url_parse.path:
@@ -64,7 +73,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             return
 
         if ('version' in url_parse.path) or ('ROI' in url_parse.path):
-            result = "Version 7.0.1 - lite (2020-04-27)"
+            result = "Version 7.0.2 - lite (2020-05-13)"
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()

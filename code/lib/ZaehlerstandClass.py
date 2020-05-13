@@ -95,6 +95,18 @@ class Zaehlerstand:
             if config['ConsistencyCheck']['ReadPreValueFromFileAtStartup']:
                 self.prevalueLoadFromFile(ReadPreValueFromFileMaxAge)
 
+    def CheckError(self):
+        ErrorText = None
+        if self.readDigitalDigit.GlobalError:
+            ErrorText = self.readDigitalDigit.GlobalErrorText
+        if self.readAnalogNeedle.GlobalError:
+            if ErrorText is not None:
+                ErrorText = ErrorText + "<br>" + self.readAnalogNeedle.GlobalErrorText
+            else:
+                ErrorText = self.readAnalogNeedle.GlobalErrorText
+        return ErrorText
+        
+
     def CheckAndLoadDefaultConfig(self):
         defaultdir = "./config_default/"
         targetdir = './config/'
