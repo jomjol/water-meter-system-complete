@@ -20,6 +20,7 @@ The parameter `url=` in the server request can be omitted, if in the Imagesource
 | ------------- | ------------- | ------------- |
 | URLImageSource | Link to the jpg-source | `URLImageSource=http://192.168.178.20/capture_with_light` |
 | TimeoutLoadImage | Maximum waiting time for image source response - otherwise error is issued | `TimeoutLoadImage=30` |
+| MinImageSize | Minimum image size. Damaged images are usually slightly smaller.| `MinImageSize=50000` |
 | LogImageLocation | optional - if set, the source images will be logged in the given folder | `LogImageLocation=./log/source_image` |
 | LogOnlyFalsePictures | optional - if enabled, only false picture will be stored to avoid large amounts of pictures | `LogOnlyFalsePictures=True` |
 
