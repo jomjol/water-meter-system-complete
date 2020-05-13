@@ -38,7 +38,7 @@ The config and the log directory can be empty at the very first start. They will
 
 ## Changelog - lastest version
 
-**Attention: 6.1.1 is the last version, that supports h5-files for neural network description. Future versions will only read tflite-files!!!***
+### **Attention: 6.1.1 is the last version, with h5-files support. Future versions will only support h5-files!!!**
 
 ##### 6.1.1 (2020-04-23)
 * Update CNN-Files to v6.0.0, v6.0.1
