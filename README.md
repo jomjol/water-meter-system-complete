@@ -86,7 +86,7 @@ The server is listening to port 3000 and accepts requests in the following synta
 | server-ip | address of the node-server running the script | `localhost` |
 
 Without any parameter and correct setting in the CONFIG.INI the server responses with an readout of the water meter:
-<img src="https://github.com/jomjol/water-meter-system-complete/blob/master/images/server_output.png" width="400">
+<img src="https://raw.githubusercontent.com/jomjol/water-meter-system-complete/master/images/server_output.png" width="400">
 
 The output of the server are 3 numbers, separated by a tabulator.
 
@@ -123,6 +123,7 @@ Example with parameter `full`:
 * http://server-ip:3000/roi.html
 
 The page `roi.html` return the image including the ROIs visible. This is usefull to check for correct setting:
+
 <img src="https://raw.githubusercontent.com/jomjol/water-meter-system-complete/master/images/roi_masked.jpg" width="400">
 
 * http://server-ip:3000/setPreValue.html?value=401.57
