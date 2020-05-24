@@ -47,10 +47,9 @@ The config and the log directory can be empty at the very first start. They will
 ##### 7.0.0 (2020-02-20) **ATTENTION: cnn-files not downward compatible **
 * Major Update: use tflite runtime instead of full Tensorflow - **ATTENTION: cnn-files not downward compatible **
 * Internal change of CNN-Usage library structure
+### **Attention: 6.1.1 is the last version, with h5-files support. Future versions will only support h5-files!!!**
 ##### 6.1.1 (2020-04-23)
 * Last Version with h5-File-Support
-
-
 
 ### [Full Changelog](https://github.com/jomjol/water-meter-system-complete/blob/raspi-rolling/Changelog.md)
 
