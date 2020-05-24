@@ -37,6 +37,8 @@ The config and the log directory can be empty at the very first start. They will
 
 ## Changelog - lastest version
 
+##### 7.1.1 (2020-05-24)
+* Error-Correction in config.ini (h5 --> tflite)
 ##### 7.1.0 (2020-05-14)
 * ErrorMessage in case of wrong CNN-files (old h5, instead of supported tflite)
 * Neural Network Files updated to newest version - trained with new user images (v6.1.0)
