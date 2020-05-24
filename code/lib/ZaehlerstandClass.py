@@ -1,7 +1,9 @@
 import configparser
-import lib.ReadAnalogNeedleClass
+#import lib.ReadAnalogNeedleClass
 import lib.CutImageClass
-import lib.ReadDigitalDigitClass
+#import lib.ReadDigitalDigitClass
+import lib.UseClassificationCNNClass
+import lib.UseAnalogCounterCNNClass
 import lib.LoadFileFromHTTPClass
 import lib.ReadConfig
 import math
@@ -31,13 +33,37 @@ class Zaehlerstand:
                 self.AnalogReadOutEnabled = False
 
         if self.AnalogReadOutEnabled:
-            self.readAnalogNeedle = lib.ReadAnalogNeedleClass.ReadAnalogNeedle()
+            zw = "Analog_Counter"
+            log_Image = ''
+            LogNames = ''
+            in_dx = 32
+            in_dy = 32
+            model_file = config[zw]['Modelfile']
+            if config.has_option(zw, 'LogImageLocation'):
+                log_Image = config[zw]['LogImageLocation']
+            if config.has_option(zw, 'LogNames'):
+                LogNames = config.get(zw, 'LogNames')
+
+            self.readAnalogNeedle = lib.UseAnalogCounterCNNClass.UseAnalogCounterCNN(model_file, in_dx, in_dy, log_Image, LogNames)
             print('Analog Model Init Done')
         else:
             print('Analog Model Disabled')
 
-        self.readDigitalDigit = lib.ReadDigitalDigitClass.ReadDigitalDigit()
+        zw = "Digital_Digit"
+        log_Image = ''
+        LogNames = ''
+        in_dx = 20
+        in_dy = 32
+        in_numberclasses = 11
+        model_file = config[zw]['Modelfile']
+        if config.has_option(zw, 'LogImageLocation'):
+            log_Image = config[zw]['LogImageLocation']
+        if config.has_option(zw, 'LogNames'):
+            LogNames = config.get(zw, 'LogNames')
+
+        self.readDigitalDigit = lib.UseClassificationCNNClass.UseClassificationCNN(model_file, in_dx, in_dy, in_numberclasses, log_Image, LogNames)
         print('Digital Model Init Done')
+
         self.CutImage = lib.CutImageClass.CutImage(self.readConfig)
         print('Digital Model Init Done')
         self.LoadFileFromHTTP = lib.LoadFileFromHTTPClass.LoadFileFromHttp()
@@ -68,6 +94,18 @@ class Zaehlerstand:
         if config.has_option('ConsistencyCheck', 'ReadPreValueFromFileAtStartup'):
             if config['ConsistencyCheck']['ReadPreValueFromFileAtStartup']:
                 self.prevalueLoadFromFile(ReadPreValueFromFileMaxAge)
+
+    def CheckError(self):
+        ErrorText = None
+        if self.readDigitalDigit.GlobalError:
+            ErrorText = self.readDigitalDigit.GlobalErrorText
+        if self.readAnalogNeedle.GlobalError:
+            if ErrorText is not None:
+                ErrorText = ErrorText + "<br>" + self.readAnalogNeedle.GlobalErrorText
+            else:
+                ErrorText = self.readAnalogNeedle.GlobalErrorText
+        return ErrorText
+        
 
     def CheckAndLoadDefaultConfig(self):
         defaultdir = "./config_default/"

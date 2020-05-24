@@ -21,7 +21,6 @@ This is available for an Intel based System (e.g. Synology Docker) as well as an
 | v4.x | Update to Tensorflow 2.0, fully automated build | Details see below |
 | v3.x | Tensorflow 1.4, manual build | Details see below  |
 
-
 ## Running docker
 Choose for the fitting docker tag and run the server with the following parameters:
 
@@ -38,15 +37,19 @@ The config and the log directory can be empty at the very first start. They will
 
 ## Changelog - lastest version
 
+##### 7.1.1 (2020-05-24)
+* Error-Correction in config.ini (h5 --> tflite)
+##### 7.1.0 (2020-05-14)
+* ErrorMessage in case of wrong CNN-files (old h5, instead of supported tflite)
+* Neural Network Files updated to newest version - trained with new user images (v6.1.0)
+##### 7.0.1 (2020-04-27)
+* Error-Correction: saving jpg-logs 
+##### 7.0.0 (2020-02-20) **ATTENTION: cnn-files not downward compatible **
+* Major Update: use tflite runtime instead of full Tensorflow - **ATTENTION: cnn-files not downward compatible **
+* Internal change of CNN-Usage library structure
 ### **Attention: 6.1.1 is the last version, with h5-files support. Future versions will only support h5-files!!!**
-
 ##### 6.1.1 (2020-04-23)
-* Update CNN-Files to v6.0.0, v6.0.1
-##### 6.1.0 (2020-04-17)
-* MinImageSize configuration parameters added. This will detect damaged images. (Extension from Zwer2k)
-##### 6.0.0 (2020-03-16)
-* Update Tensorflow to v2.1 - downgrade Python to v3.6 (to enable compiling for Synology (w/o AVX2))
-
+* Last Version with h5-File-Support
 
 ### [Full Changelog](https://github.com/jomjol/water-meter-system-complete/blob/raspi-rolling/Changelog.md)
 

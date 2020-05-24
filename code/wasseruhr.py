@@ -25,6 +25,23 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             gc.collect()
             wasserzaehler = lib.ZaehlerstandClass.Zaehlerstand()
             return
+
+        if ('version' in url_parse.path) or ('ROI' in url_parse.path):
+            result = "Version 7.1.1 (2020-05-24)"
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(bytes(result, 'UTF-8'))
+            return            
+
+        GlobalError = wasserzaehler.CheckError()
+        if GlobalError is not None:
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(bytes(GlobalError, 'UTF-8'))
+
+            return
            
 
         if "/image_tmp/" in url_parse.path:
@@ -61,14 +78,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             a = 1
             b = 0
             c = a / b
-            return
-
-        if ('version' in url_parse.path) or ('ROI' in url_parse.path):
-            result = "Version 6.1.1 (2020-04-23)"
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
-            self.wfile.write(bytes(result, 'UTF-8'))
             return
 
         if ('crash' in url_parse.path):

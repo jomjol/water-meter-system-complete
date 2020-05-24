@@ -1,4 +1,4 @@
-FROM jomjol/raspberry-opencv-tensorflow:tf21
+FROM jomjol/raspberry-opencv-tensorflow-lite
 
 RUN [ "cross-build-start" ]
 

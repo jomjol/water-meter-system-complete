@@ -1,4 +1,10 @@
 ## Changelog
+##### 6.1.1 (2020-04-23)
+* Update CNN-Files to v6.0.0, v6.0.1
+##### 6.1.0 (2020-04-17)
+* MinImageSize configuration parameters added. This will detect damaged images. (Extension from Zwer2k)
+##### 6.0.0 (2020-03-16)
+* Update Tensorflow to v2.1 - downgrade Python to v3.6 (to enable compiling for Synology (w/o AVX2))
 ##### 5.6.1 (2020-03-12)
 * Correct error in docker commmand (remove space character in bind)
 ##### 5.6.0 (2020-03-07)

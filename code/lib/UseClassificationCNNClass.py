@@ -1,6 +1,5 @@
-from tensorflow.keras.models import load_model
-import tensorflow.keras.backend as K
-import tensorflow as tf 
+import tflite_runtime.interpreter as tflite
+
 from PIL import Image
 import numpy as np
 import glob
@@ -11,32 +10,32 @@ import math
 import time
 from shutil import copyfile
 from PIL import Image 
+from datetime import datetime
 
-class ReadDigitalDigit:
-    def __init__(self):
-        config = configparser.ConfigParser()
-        config.read('./config/config.ini')
+debug = True
 
-        self.log_Image = ''
+class UseClassificationCNN:
+    def __init__(self, in_Modelfile, in_dx, in_dy, in_numberclasses, in_LogImageLocation, in_LogNames):
+        self.log_Image = in_LogImageLocation
         self.LogNames = ''
+        self.dx = in_dx
+        self.dy = in_dy
+        self.GlobalError = False
+        self.GlobalErrorText = ""        
 
-        self.model_file = config['Digital_Digit']['Modelfile']
-        if config.has_option('Digital_Digit', 'LogImageLocation'):
-            self.log_Image = config['Digital_Digit']['LogImageLocation']
+        self.model_file = in_Modelfile
+
         self.CheckAndLoadDefaultConfig()
 
-        if config.has_option('Digital_Digit', 'LogImageLocation'):
+        if in_LogImageLocation:
             if (os.path.exists(self.log_Image)):
-                for i in range(10):
+                for i in range(in_numberclasses):
                     pfad = self.log_Image + '/' + str(i)
                     if not os.path.exists(pfad):
                         os.makedirs(pfad)
-                pfad = self.log_Image + '/NaN'
-                if not os.path.exists(pfad):
-                    os.makedirs(pfad)
 
-            if config.has_option('Digital_Digit', 'LogNames'):
-                zw_LogNames = config.get('Digital_Digit', 'LogNames').split(',')
+            if in_LogNames:
+                zw_LogNames = in_LogNames.split(',')
                 self.LogNames = []
                 for nm in zw_LogNames:
                       self.LogNames.append(nm.strip())
@@ -45,8 +44,19 @@ class ReadDigitalDigit:
         else:
             self.log_Image = ''
 
-        self.model_file = config['Digital_Digit']['Modelfile']
-        self.model = load_model(self.model_file)
+        filename, file_extension = os.path.splitext(self.model_file)
+        if file_extension != ".tflite":
+            print("ERROR - only TFLite-Model (*.tflite) are support since version 7.0.0 and higher")
+            self.GlobalError = True
+            self.GlobalErrorText = "DigitalCNN-File for Analog Neural Network is not tflite-Format. If you want to use h5-files you need to downgrade to v6.1.1. This is not recommended."
+            return
+
+
+        self.interpreter = tflite.Interpreter(model_path=self.model_file)
+        self.interpreter.allocate_tensors()
+        self.input_details = self.interpreter.get_input_details()
+        self.output_details = self.interpreter.get_output_details()
+
 
     def CheckAndLoadDefaultConfig(self):
         defaultdir = "./config_default/"
@@ -79,22 +89,50 @@ class ReadDigitalDigit:
         return self.result
 
     def ReadoutSingleImage(self, image):
-        test_image = image.resize((20, 32), Image.NEAREST)
+        if debug: 
+            print(self.gettimestring() + " Validity 01")
+        test_image = image.resize((self.dx,  self.dy), Image.NEAREST)
+        if debug: 
+            print(self.gettimestring() + " Validity 02")
         test_image.save('./image_tmp/resize.jpg', "JPEG")
+        if debug: 
+            print(self.gettimestring() + " Validity 03")
         test_image = np.array(test_image, dtype="float32")
-        img = np.reshape(test_image,[1,32,20,3])
-        result = self.model.predict_classes(img)
-        K.clear_session()
+        if debug: 
+            print(self.gettimestring() + " Validity 04")
+        img = np.reshape(test_image,[1, self.dy, self.dx,3])
+        if debug: 
+            print(self.gettimestring() + " Validity 05")
+
+
+        input_data = img
+        self.interpreter.set_tensor(self.input_details[0]['index'], input_data)
+        self.interpreter.invoke()
+        output_data = self.interpreter.get_tensor(self.output_details[0]['index'])
+        result = np.argmax(output_data)
+
         if result == 10:
             result = "NaN"
-        else:
-            result = result[0]
+
+
+        if debug: 
+            print(self.gettimestring() + " Validity 06")
+        if debug: 
+            print(self.gettimestring() + " Validity 07")
+
         return result
 
     def saveLogImage(self, image, value, logtime):
         if (len(self.LogNames) > 0) and (not image[0] in self.LogNames):
             return
+        if value == 'NaN':
+            value = 10
         speichername = image[0] + '_' + logtime + '.jpg'
         speichername = self.log_Image + '/' + str(value) + '/' + speichername
         image[1].save(speichername, "JPEG")
+
+    def gettimestring(self):
+        curr_time = datetime.now()
+        formatted_time = curr_time.strftime('%Y-%m-%d %H:%M:%S.%f')
+        return formatted_time
 
