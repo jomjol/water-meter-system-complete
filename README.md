@@ -37,6 +37,8 @@ The config and the log directory can be empty at the very first start. They will
 
 ## Changelog - lastest version
 
+##### 7.1.2 (2020-05-29)
+* Updated CNN for digital digits (v6.1.1)
 ##### 7.1.1 (2020-05-24)
 * Error-Correction in config.ini (h5 --> tflite)
 ##### 7.1.0 (2020-05-14)
