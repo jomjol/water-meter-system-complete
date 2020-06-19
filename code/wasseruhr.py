@@ -27,7 +27,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             return
 
         if ('version' in url_parse.path) or ('ROI' in url_parse.path):
-            result = "Version 7.1.1 (2020-05-24)"
+            result = "Version 7.2.0 (2020-06-19)"
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()

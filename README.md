@@ -37,6 +37,9 @@ The config and the log directory can be empty at the very first start. They will
 
 ## Changelog - lastest version
 
+##### 7.2.2 (2020-06-19)
+* Updated CNN for analog digits (v6.2.0)
+* Error correction: in case alls digital values were 0 they all have been removed (Result: ".123" instead of "0.123")
 ##### 7.1.2 (2020-05-29)
 * Updated CNN for digital digits (v6.1.1)
 ##### 7.1.1 (2020-05-24)

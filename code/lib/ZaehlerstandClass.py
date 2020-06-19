@@ -334,6 +334,8 @@ class Zaehlerstand:
                  output = errortxt
         else:
             output = str(self.akt_vorkomma.lstrip("0"))
+            if len(output) == 0:
+                output = '0'
             if self.AnalogReadOutEnabled:
                 output = output + '.' + str(self.akt_nachkomma)
             if not single:
