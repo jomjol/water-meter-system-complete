@@ -24,7 +24,9 @@ This is available for an Intel based System (e.g. Synology Docker) as well as an
 ## Running docker
 Choose for the fitting docker tag and run the server with the following parameters:
 
-```sudo docker run -p 3000:3000 --mount type=bind,source=/PATH_TO_LOCAL_CONFIG,target=/config --mount type=bind,source=/PATH_TO_LOCAL_LOG,target=/log jomjol/wasserzaehler:DOCKER_TAG```
+```
+sudo docker run -p 3000:3000 --mount type=bind,source=/PATH_TO_LOCAL_CONFIG, target=/app/config --mount type=bind,source=/PATH_TO_LOCAL_LOG,target=/app/log jomjol/wasserzaehler:DOCKER_TAG
+```
 
 #### Paramters
 | Parameter | 	Meaning  | Example |
@@ -37,6 +39,13 @@ The config and the log directory can be empty at the very first start. They will
 
 ## Changelog - lastest version
 
+##### 7.3.0 (2020-06-20) 
+**ATTENTION: link path for the mounting directories needs to be updated: /config --> /app/config and /log --> /app/log **
+* Updated Docker file thank to commit of github/kassi
+* Compliance with docker recommendations
+* Improved docker build speed
+* Using local timezone (Europe/Berlin) within docker container
+* Thanks a lot to github/kassi
 ##### 7.2.2 (2020-06-19)
 * Updated CNN for analog digits (v6.2.0)
 * Error correction: in case alls digital values were 0 they all have been removed (Result: ".123" instead of "0.123")
