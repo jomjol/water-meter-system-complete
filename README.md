@@ -40,7 +40,7 @@ The config and the log directory can be empty at the very first start. They will
 ## Changelog - lastest version
 
 ##### 7.3.0 (2020-06-20) 
-**ATTENTION: link path for the mounting directories needs to be updated: /config --> /app/config and /log --> /app/log **
+**ATTENTION: link path for the mounting directories needs to be updated: /config --> /app/config and /log --> /app/log**
 * Updated Docker file thank to commit of github/kassi
 * Compliance with docker recommendations
 * Improved docker build speed
