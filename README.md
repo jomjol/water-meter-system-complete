@@ -63,7 +63,7 @@ The overall system with description of the single steps is described here: [http
 
 A graphical overview about the steps is shown in the following flow:
 
-<img src="https://github.com/jomjol/water-meter-system-complete/blob/master/images/signal_flow.png" width="800"> 
+<img src="https://raw.githubusercontent.com/jomjol/water-meter-system-complete/master/images/signal_flow.png" width="800"> 
 
 ## Setup
 
@@ -94,7 +94,7 @@ The server is listening to port 3000 and accepts requests in the following synta
 | server-ip | address of the node-server running the script | `localhost` |
 
 Without any parameter and correct setting in the CONFIG.INI the server responses with an readout of the water meter:
-<img src="https://github.com/jomjol/water-meter-system-complete/blob/master/images/server_output.png" width="400">
+<img src="https://raw.githubusercontent.com/jomjol/water-meter-system-complete/master/images/server_output.png" width="400">
 
 The output of the server are 3 numbers, separated by a tabulator.
 
@@ -125,13 +125,14 @@ The paramaters can be combined arbitrary.
 
 Example with parameter `full`:
 
-<img src="https://github.com/jomjol/water-meter-system-complete/blob/master/images/sever_output_full.png" width="400">
+<img src="https://raw.githubusercontent.com/jomjol/water-meter-system-complete/master/images/sever_output_full.png" width="400">
 
 ## Additional Settings
 * http://server-ip:3000/roi.html
 
 The page `roi.html` return the image including the ROIs visible. This is usefull to check for correct setting:
-<img src="https://github.com/jomjol/water-meter-system-complete/blob/master/images/roi_masked.jpg" width="400">
+
+<img src="https://raw.githubusercontent.com/jomjol/water-meter-system-complete/master/images/roi_masked.jpg" width="400">
 
 * http://server-ip:3000/setPreValue.html?value=401.57
 
