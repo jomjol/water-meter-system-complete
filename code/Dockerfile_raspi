@@ -1,15 +1,16 @@
 FROM jomjol/raspberry-opencv-tensorflow-lite
 
+EXPOSE 3000
+
+ENV PYTHONUNBUFFERED=1
+
 RUN [ "cross-build-start" ]
 
-WORKDIR /
-
+WORKDIR /app
+COPY ./requirements.txt .
+RUN pip3 install --no-cache-dir -r requirements_raspi.txt
 COPY . ./
 
-RUN pip3 install --no-cache-dir -r requirements_raspi.txt
-
 RUN [ "cross-build-end" ]
-
-EXPOSE 3000
 
 CMD ["python3", "./wasseruhr.py"]
