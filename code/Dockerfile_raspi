@@ -10,7 +10,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /app
 COPY ./requirements_raspi.txt .
-RUN pip install --no-cache-dir -r requirements_raspi.txt
+RUN pip install --no-cache-dir -r ./requirements_raspi.txt
 COPY . ./
 
 RUN [ "cross-build-end" ]
