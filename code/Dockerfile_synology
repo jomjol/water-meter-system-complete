@@ -3,6 +3,8 @@ FROM jomjol/synology-opencv-tensorflow-lite
 EXPOSE 3000
 
 ENV PYTHONUNBUFFERED=1
+ENV TZ Europe/Berlin
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 WORKDIR /app
 COPY ./requirements.txt .
