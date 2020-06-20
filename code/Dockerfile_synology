@@ -2,9 +2,10 @@ FROM jomjol/synology-opencv-tensorflow-lite
 
 WORKDIR /app
 
-COPY . ./
+COPY ./requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 3000
+COPY . ./
 
 CMD ["python", "./wasseruhr.py"]
