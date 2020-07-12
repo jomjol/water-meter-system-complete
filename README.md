@@ -39,7 +39,11 @@ The config and the log directory can be empty at the very first start. They will
 
 ## Changelog - lastest version
 
-##### 7.3.0 (2020-06-20) 
+##### 7.5.0 (2020-07-12)
+* Updated CNN for digital digits (v6.2.0)
+* Training with new picture from iobroker users
+* White on black, white on red digits
+##### 7.4.0 (2020-06-20) 
 **ATTENTION: link path for the mounting directories needs to be updated: /config --> /app/config and /log --> /app/log**
 * Updated Docker file thank to commit of github/kassi
 * Compliance with docker recommendations
