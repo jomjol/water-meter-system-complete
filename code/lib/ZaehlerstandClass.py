@@ -99,11 +99,12 @@ class Zaehlerstand:
         ErrorText = None
         if self.readDigitalDigit.GlobalError:
             ErrorText = self.readDigitalDigit.GlobalErrorText
-        if self.readAnalogNeedle.GlobalError:
-            if ErrorText is not None:
-                ErrorText = ErrorText + "<br>" + self.readAnalogNeedle.GlobalErrorText
-            else:
-                ErrorText = self.readAnalogNeedle.GlobalErrorText
+        if self.AnalogReadOutEnabled:    
+            if self.readAnalogNeedle.GlobalError:
+                if ErrorText is not None:
+                    ErrorText = ErrorText + "<br>" + self.readAnalogNeedle.GlobalErrorText
+                else:
+                    ErrorText = self.readAnalogNeedle.GlobalErrorText
         return ErrorText
         
 
