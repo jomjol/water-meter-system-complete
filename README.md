@@ -1,4 +1,14 @@
 # water-meter-system-complete
+-------------------
+**Update 04.09.2020:** There is an update version available, which is more compact on the hardware side and much easier from software side, because it is an all in one device. It does not need a docker container for image analysis any more as everything, including a web based configuration server is running on the ESP32
+
+Software: https://github.com/jomjol/AI-on-the-edge-device
+
+Hardware: https://www.thingiverse.com/thing:4573481
+
+
+
+------------------
 
 This repository describes a readout of an analog water meter with the help of a camera and image processing, including neural network processing to extract the values.
 The interface is a local HTTP-server, that takes an image as input, processes it and gives as an output the readout of the water meter counter, including the subdigits.
