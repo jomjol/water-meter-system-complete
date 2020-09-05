@@ -2,7 +2,7 @@
 -------------------
 **Update 04.09.2020:** There is an update version available, which is more compact on the hardware side and much easier from software side, because it is an all in one device. It does not need a docker container for image analysis any more as everything, including a web based configuration server is running on the ESP32
 
-Software: https://github.com/jomjol/AI-on-the-edge-device
+Software: https://github.com/jomjol/AI-on-the-edge-device/wiki
 
 Hardware: https://www.thingiverse.com/thing:4573481
 
