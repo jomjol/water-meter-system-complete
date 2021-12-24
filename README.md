@@ -1,3 +1,5 @@
+<span style="color: red;">This code is depreciated and will not be maintained any more!</span> 
+
 # water-meter-system-complete
 -------------------
 **Update 04.09.2020:** There is an update version available, which is more compact on the hardware side and much easier from software side, because it is an all in one device. It does not need a docker container for image analysis any more as everything, including a web based configuration server is running on the ESP32
